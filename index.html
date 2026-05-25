@@ -681,7 +681,7 @@
   <h1>Internal <span class="alt">Guides.</span></h1>
 
   <p class="hero-lede">
-    A living reference library for everyone at <strong>PGC, PBS, Paradigm Solar, BuildForth, and StokedLiving</strong>. Search any guide below, filter by audience or topic, and bookmark this page — it's updated as we learn.
+    A living reference library for everyone at <strong>PGC, PBS, Paradigm Solar, BuildForth, and StokedLiving</strong>. Search any guide below, filter by audience or topic, and bookmark this page.
   </p>
 
   <div class="hero-meta">
@@ -706,18 +706,6 @@
 
 <!-- DIRECTORY -->
 <section class="directory">
-  <div class="dir-header">
-    <div class="dir-num">Section 01 — Directory</div>
-    <div class="dir-title-wrap">
-      <div class="dir-title">
-        Every guide we've written — <span class="alt">browse, search, filter.</span>
-      </div>
-      <div class="result-count" id="result-count">
-        <span class="num" id="visible-count">02</span> / <span id="total-count-2">02</span> visible
-      </div>
-    </div>
-  </div>
-
   <!-- Search -->
   <div class="controls">
     <div class="controls-label">Search &amp; Filter</div>
@@ -850,16 +838,13 @@
   const clearSearchBtn = document.getElementById('clear-search');
   const searchHint = document.getElementById('search-hint');
   const resetAllBtn = document.getElementById('reset-all');
-  const visibleCount = document.getElementById('visible-count');
   const totalCount = document.getElementById('total-count');
-  const totalCount2 = document.getElementById('total-count-2');
   const empty = document.getElementById('empty');
   const guides = Array.from(document.querySelectorAll('.guide'));
   const chips = Array.from(document.querySelectorAll('.chip'));
 
-  // Initialize total counts
+  // Keep hero "Guides Published" count in sync with how many cards exist
   totalCount.textContent = String(guides.length).padStart(2, '0');
-  totalCount2.textContent = String(guides.length).padStart(2, '0');
 
   // ────── Filter logic ──────
   function applyFilters() {
@@ -889,7 +874,6 @@
       }
     });
 
-    visibleCount.textContent = String(visible).padStart(2, '0');
     empty.classList.toggle('visible', visible === 0);
     clearSearchBtn.classList.toggle('visible', !!q);
     searchHint.classList.toggle('hidden', !!q || document.activeElement === searchInput);
