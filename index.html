@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <meta name="referrer" content="no-referrer">
-<title>Paradigm Internal Guides</title>
+<title>Internal Guides — Paradigm Group of Companies</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
     --paper: #F2EEE5;
@@ -32,50 +32,251 @@
     font-family: 'Catamaran', sans-serif;
     background: var(--paper);
     color: var(--ink);
-    min-height: 100vh;
+    font-weight: 400;
     line-height: 1.55;
+    font-size: 17px;
     -webkit-font-smoothing: antialiased;
-    padding: 48px 24px 80px;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
   }
 
-  main {
-    max-width: 820px;
+  /* Paper grain texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(0,0,0,0.012) 1px, transparent 1px),
+      radial-gradient(circle at 70% 70%, rgba(0,0,0,0.012) 1px, transparent 1px),
+      radial-gradient(circle at 40% 80%, rgba(0,0,0,0.008) 1px, transparent 1px);
+    background-size: 4px 4px, 6px 6px, 5px 5px;
+    z-index: 1;
+    opacity: 0.6;
+  }
+
+  /* Architectural grid background */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgba(22,21,19,0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(22,21,19,0.025) 1px, transparent 1px);
+    background-size: 80px 80px;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: 1380px;
     margin: 0 auto;
+    padding: 0 56px;
   }
 
-  /* ────── Header ────── */
-  header {
+  /* ─────────────────── TOP BAR ─────────────────── */
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(242, 238, 229, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(22,21,19,0.08);
+  }
+  .topbar-inner {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 14px 56px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 14px; }
+  .topbar-mark {
+    width: 22px; height: 22px;
+    background: var(--red);
+    display: inline-block;
+    position: relative;
+  }
+  .topbar-mark::after {
+    content: '';
+    position: absolute;
+    top: 4px; left: 4px;
+    width: 14px; height: 14px;
+    background: var(--paper);
+  }
+  .topbar-meta { color: var(--ink-faint); font-weight: 500; }
+
+  /* ─────────────────── HERO ─────────────────── */
+  .hero {
+    padding: 180px 0 80px;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink-soft);
     margin-bottom: 40px;
   }
-  .eyebrow {
-    font-size: 12px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--red);
-    font-weight: 600;
-    margin-bottom: 12px;
+  .hero-eyebrow::before {
+    content: '';
+    width: 48px;
+    height: 2px;
+    background: var(--red);
   }
-  h1 {
-    font-size: clamp(36px, 5vw, 56px);
-    line-height: 1.05;
+  .hero-eyebrow .sep { color: var(--ink-faint); font-weight: 400; }
+  .hero-eyebrow .accent { color: var(--red); font-weight: 800; }
+
+  .company {
+    font-size: clamp(28px, 3.6vw, 56px);
     font-weight: 800;
-    letter-spacing: -0.015em;
-    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+    line-height: 1.0;
+    margin-bottom: 12px;
+    color: var(--ink);
   }
-  .lede {
-    font-size: 18px;
-    color: var(--ink-soft);
-    max-width: 580px;
+  .company .of { color: var(--ink-faint); font-weight: 300; font-style: italic; }
+  .company .red { color: var(--red); }
+
+  .company-stripe {
+    display: inline-block;
+    height: 8px;
+    background: var(--red);
+    margin: 8px 0 36px;
+    width: 80px;
   }
 
-  /* ────── Search bar ────── */
+  .hero h1 {
+    font-size: clamp(56px, 8.5vw, 132px);
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    margin-bottom: 36px;
+    max-width: 14ch;
+  }
+  .hero h1 .alt { color: var(--red); font-style: italic; font-weight: 900; }
+  .hero h1 .line { display: block; }
+
+  .hero-lede {
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    max-width: 56ch;
+    font-weight: 400;
+    margin-bottom: 56px;
+  }
+  .hero-lede strong { color: var(--ink); font-weight: 700; }
+
+  .hero-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(22,21,19,0.15);
+  }
+  .meta-block .label {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+    display: block;
+  }
+  .meta-block .value {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  .meta-block .value.red { color: var(--red); }
+  .meta-block .value .num { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+
+  /* ─────────────────── DIRECTORY HEADER ─────────────────── */
+  .directory {
+    padding: 60px 0 32px;
+    position: relative;
+  }
+
+  .dir-header {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+    align-items: end;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .dir-num {
+    font-size: 14px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--red);
+  }
+  .dir-title-wrap {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .dir-title {
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+  }
+  .dir-title .alt { font-style: italic; color: var(--red); }
+  .result-count {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .result-count .num { color: var(--red); font-weight: 800; }
+
+  /* ─────────────────── SEARCH & FILTERS ─────────────────── */
+  .controls {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+    align-items: start;
+  }
+  .controls-label {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 700;
+    padding-top: 18px;
+  }
+  .controls-main { display: flex; flex-direction: column; gap: 18px; }
+
   .search-wrap {
     position: relative;
-    margin: 36px 0 20px;
   }
   .search-icon {
     position: absolute;
-    left: 18px;
+    left: 22px;
     top: 50%;
     transform: translateY(-50%);
     width: 18px;
@@ -85,66 +286,86 @@
   }
   .search-input {
     width: 100%;
-    padding: 16px 48px 16px 48px;
-    background: var(--paper-card);
-    border: 1px solid rgba(26, 25, 22, 0.12);
-    border-radius: 4px;
+    padding: 22px 56px 22px 56px;
+    background: transparent;
+    border: 2px solid var(--ink);
+    border-radius: 0;
     font-family: inherit;
-    font-size: 17px;
+    font-size: 19px;
+    font-weight: 500;
     color: var(--ink);
     outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: border-color 0.15s ease;
+    letter-spacing: -0.005em;
   }
   .search-input::placeholder {
     color: var(--ink-faint);
+    font-weight: 400;
+    font-style: italic;
   }
-  .search-input:focus {
-    border-color: var(--red);
-    box-shadow: 0 0 0 3px var(--red-tint);
-  }
+  .search-input:focus { border-color: var(--red); }
+  .search-input:focus ~ .search-icon { color: var(--red); }
   .clear-search {
     position: absolute;
-    right: 14px;
+    right: 18px;
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
     border: none;
     color: var(--ink-faint);
     cursor: pointer;
-    padding: 6px;
-    border-radius: 4px;
-    display: none;
+    padding: 8px 12px;
     font-family: inherit;
-    font-size: 13px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: none;
   }
   .clear-search:hover { color: var(--red); }
   .clear-search.visible { display: block; }
+  .search-hint {
+    position: absolute;
+    right: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 700;
+    pointer-events: none;
+    background: var(--paper-deep);
+    padding: 4px 8px;
+    border: 1px solid rgba(22,21,19,0.15);
+  }
+  .search-hint.hidden { display: none; }
 
-  /* ────── Filter chips ────── */
-  .filters {
+  .filters-wrap {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 32px;
     align-items: center;
   }
-  .filter-label {
-    font-size: 11px;
-    letter-spacing: 0.15em;
+  .filters-label {
+    font-size: 10px;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--ink-faint);
-    font-weight: 600;
+    font-weight: 700;
     margin-right: 4px;
   }
   .chip {
-    background: var(--paper-card);
-    border: 1px solid rgba(26, 25, 22, 0.12);
+    background: transparent;
+    border: 1.5px solid rgba(22,21,19,0.2);
     color: var(--ink-soft);
-    padding: 6px 14px;
-    border-radius: 100px;
+    padding: 8px 16px;
+    border-radius: 0;
     font-family: inherit;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     cursor: pointer;
     transition: all 0.15s ease;
     white-space: nowrap;
@@ -158,247 +379,491 @@
     color: var(--paper);
     border-color: var(--ink);
   }
-  .chip-count {
-    margin-left: 6px;
-    opacity: 0.6;
-    font-size: 11px;
-  }
   .reset-all {
     background: transparent;
     border: none;
     color: var(--red);
     cursor: pointer;
-    padding: 6px 8px;
+    padding: 8px 12px;
     font-family: inherit;
-    font-size: 13px;
-    font-weight: 500;
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
     display: none;
+    margin-left: auto;
   }
+  .reset-all:hover { color: var(--red-deep); }
   .reset-all.visible { display: inline-flex; }
 
-  /* ────── Result count ────── */
-  .result-count {
-    font-size: 13px;
-    color: var(--ink-faint);
-    margin-bottom: 16px;
-    letter-spacing: 0.02em;
+  /* ─────────────────── GUIDE LIST ─────────────────── */
+  .guides {
+    display: flex;
+    flex-direction: column;
   }
 
-  /* ────── Guide cards ────── */
-  .guides {
-    display: grid;
-    gap: 14px;
-  }
   .guide {
-    display: block;
-    padding: 26px 28px;
-    background: var(--paper-card);
-    border: 1px solid rgba(26, 25, 22, 0.08);
-    border-radius: 4px;
+    display: grid;
+    grid-template-columns: 200px 1fr 220px;
+    gap: 48px;
+    padding: 48px 0;
+    border-top: 1px solid rgba(22,21,19,0.15);
     text-decoration: none;
     color: var(--ink);
-    transition: all 0.18s ease;
+    transition: background 0.2s ease;
     position: relative;
+    align-items: start;
   }
+  .guide:last-child { border-bottom: 1px solid rgba(22,21,19,0.15); }
   .guide:hover {
-    background: #fff;
-    border-color: var(--red);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    background: rgba(255, 255, 255, 0.4);
+  }
+  .guide::after {
+    content: '';
+    position: absolute;
+    left: 0; top: -1px;
+    width: 0;
+    height: calc(100% + 2px);
+    background: var(--red);
+    transition: width 0.2s ease;
+    z-index: -1;
+    opacity: 0.06;
+  }
+  .guide:hover::after { width: 100%; }
+
+  .guide-num {
+    font-size: 56px;
+    font-weight: 200;
+    line-height: 0.9;
+    color: var(--ink);
+    letter-spacing: -0.025em;
+  }
+  .guide-num .slash { color: var(--red); font-weight: 600; }
+
+  .guide-body {
+    max-width: 60ch;
+  }
+  .guide-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--red);
+    margin-bottom: 12px;
+    display: block;
   }
   .guide-title {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    line-height: 1.2;
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.018em;
+    margin-bottom: 12px;
+    color: var(--ink);
   }
+  .guide:hover .guide-title { color: var(--red); }
   .guide-desc {
+    font-size: 17px;
+    line-height: 1.55;
     color: var(--ink-soft);
-    font-size: 15px;
-    line-height: 1.5;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
   }
   .guide-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    align-items: center;
   }
   .guide-tag {
     display: inline-block;
-    padding: 3px 10px;
-    background: var(--red-tint);
-    color: var(--red-deep);
-    border-radius: 100px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    padding: 4px 10px;
+    background: transparent;
+    border: 1px solid rgba(22,21,19,0.2);
+    color: var(--ink-soft);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
-  .guide-tag.audience { background: rgba(47, 79, 54, 0.12); color: var(--green); }
-  .guide-meta {
-    margin-left: auto;
-    font-size: 11px;
-    color: var(--ink-faint);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
+  .guide-tag.audience { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .guide-tag.topic { background: var(--red-tint); color: var(--red-deep); border-color: rgba(200, 32, 44, 0.2); }
 
-  /* Hide cards filtered out */
+  .guide-side {
+    text-align: right;
+    padding-top: 8px;
+  }
+  .guide-meta {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .guide-meta .red { color: var(--red); }
+  .guide-arrow {
+    margin-top: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 800;
+    transition: gap 0.2s ease, color 0.2s ease;
+  }
+  .guide-arrow .arrow {
+    font-size: 18px;
+    line-height: 1;
+    transition: transform 0.2s ease;
+  }
+  .guide:hover .guide-arrow { gap: 14px; color: var(--red); }
+  .guide:hover .guide-arrow .arrow { transform: translateX(4px); }
+
   .guide.hidden { display: none; }
 
-  /* ────── Empty state ────── */
+  /* ─────────────────── EMPTY STATE ─────────────────── */
   .empty {
-    padding: 48px 24px;
+    padding: 96px 24px;
     text-align: center;
-    color: var(--ink-faint);
-    background: var(--paper-card);
-    border: 1px dashed rgba(26, 25, 22, 0.15);
-    border-radius: 4px;
+    border-top: 1px solid rgba(22,21,19,0.15);
+    border-bottom: 1px solid rgba(22,21,19,0.15);
     display: none;
   }
   .empty.visible { display: block; }
+  .empty-num {
+    font-size: 96px;
+    font-weight: 200;
+    line-height: 0.85;
+    color: var(--red);
+    margin-bottom: 16px;
+  }
   .empty-title {
-    font-size: 18px;
-    color: var(--ink-soft);
-    margin-bottom: 6px;
-    font-weight: 600;
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
   }
   .empty-hint {
     font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 40ch;
+    margin: 0 auto;
   }
 
-  /* ────── Footer ────── */
+  /* ─────────────────── FOOTER ─────────────────── */
   footer {
-    margin-top: 64px;
-    padding-top: 24px;
-    border-top: 1px solid rgba(26, 25, 22, 0.1);
-    font-size: 13px;
-    color: var(--ink-faint);
+    margin-top: 0;
+    padding: 96px 0 32px;
   }
-  footer p { margin-bottom: 6px; }
-  footer a {
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 56px;
+    padding-top: 56px;
+    border-top: 4px double rgba(22,21,19,0.2);
+  }
+  .footer-grid .label {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--ink-faint);
+    margin-bottom: 12px;
+  }
+  .footer-grid p { font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
+  .footer-grid p strong { color: var(--ink); font-weight: 700; }
+  .footer-grid a {
     color: var(--ink-soft);
     text-decoration: none;
-    border-bottom: 1px solid rgba(26, 25, 22, 0.2);
+    border-bottom: 1px solid rgba(22,21,19,0.2);
+    transition: all 0.15s;
   }
-  footer a:hover { color: var(--red); border-bottom-color: var(--red); }
+  .footer-grid a:hover { color: var(--red); border-bottom-color: var(--red); }
+  .footer-end {
+    padding-top: 28px;
+    border-top: 1px solid rgba(22,21,19,0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink-faint);
+  }
+  .footer-end .red { color: var(--red); }
+  .footer-mark {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .footer-mark .mark {
+    width: 18px; height: 18px;
+    background: var(--red);
+    position: relative;
+  }
+  .footer-mark .mark::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 12px; height: 12px;
+    background: var(--paper);
+  }
 
-  @media (max-width: 540px) {
-    body { padding: 32px 16px 60px; }
-    .guide { padding: 22px 20px; }
-    .guide-title { font-size: 19px; }
+  /* ─────────────────── ANIMATIONS ─────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─────────────────── RESPONSIVE ─────────────────── */
+  @media (max-width: 1100px) {
+    .container { padding: 0 40px; }
+    .hero-meta { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .dir-header { grid-template-columns: 1fr; gap: 16px; }
+    .controls { grid-template-columns: 1fr; gap: 16px; }
+    .controls-label { display: none; }
+    .guide { grid-template-columns: 80px 1fr; gap: 24px; }
+    .guide-side { grid-column: 2; text-align: left; padding-top: 4px; }
+    .guide-meta { display: inline-block; margin-right: 16px; }
+    .footer-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .container { padding: 0 24px; }
+    .topbar-inner { padding: 12px 24px; }
+    .topbar-meta { display: none; }
+    .hero { padding: 140px 0 60px; }
+    .hero-meta { grid-template-columns: 1fr; gap: 16px; }
+    .guide { grid-template-columns: 64px 1fr; gap: 16px; padding: 32px 0; }
+    .guide-num { font-size: 36px; }
+    .guide-title { font-size: 24px; }
+    .footer-end { flex-direction: column; gap: 16px; align-items: flex-start; }
+    .search-hint { display: none; }
   }
 </style>
 </head>
 <body>
-  <main>
 
-    <header>
-      <div class="eyebrow">Paradigm Group of Companies</div>
-      <h1>Internal Guides</h1>
-      <p class="lede">
-        Living documentation for staff. Bookmark this page. Use search or filters to find what you need.
-      </p>
-    </header>
-
-    <!-- Search -->
-    <div class="search-wrap">
-      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="7"/>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-      </svg>
-      <input
-        type="text"
-        class="search-input"
-        id="search"
-        placeholder="Search guides — title, description, or tag…"
-        autocomplete="off"
-        spellcheck="false"
-      >
-      <button class="clear-search" id="clear-search" aria-label="Clear search">Clear</button>
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-brand">
+      <span class="topbar-mark"></span>
+      <span>Paradigm Group of Companies</span>
     </div>
+    <div class="topbar-meta">Internal Knowledge Base · Staff Use Only</div>
+  </div>
+</div>
 
-    <!-- Filter chips -->
-    <div class="filters" id="filters">
-      <span class="filter-label">Filter:</span>
-      <button class="chip" data-filter="all-staff">For all staff</button>
-      <button class="chip" data-filter="it">For IT / admins</button>
-      <button class="chip" data-filter="ai">AI / Claude</button>
-      <button class="chip" data-filter="microsoft-365">Microsoft 365</button>
-      <button class="chip" data-filter="setup">Setup</button>
-      <button class="reset-all" id="reset-all">Reset filters</button>
+<div class="container">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">
+    <span class="accent">PGC</span>
+    <span class="sep">/</span>
+    <span>Internal Knowledge Base</span>
+    <span class="sep">/</span>
+    <span>Living Documentation</span>
+  </div>
+
+  <div class="company">
+    Paradigm <span class="of">Group of</span> <span class="red">Companies</span>
+  </div>
+  <div class="company-stripe"></div>
+
+  <h1>
+    <span class="line">Internal</span>
+    <span class="line"><span class="alt">Guides.</span></span>
+  </h1>
+
+  <p class="hero-lede">
+    A living reference library for everyone at <strong>PGC, PBS, Paradigm Solar, BuildForth, and StokedLiving</strong>. Search any guide below, filter by audience or topic, and bookmark this page — it's updated as we learn.
+  </p>
+
+  <div class="hero-meta">
+    <div class="meta-block">
+      <span class="label">Guides Published</span>
+      <span class="value"><span class="num" id="total-count">02</span></span>
     </div>
+    <div class="meta-block">
+      <span class="label">Last Updated</span>
+      <span class="value">May 2026</span>
+    </div>
+    <div class="meta-block">
+      <span class="label">Audience</span>
+      <span class="value">All PGC Staff</span>
+    </div>
+    <div class="meta-block">
+      <span class="label">Maintained By</span>
+      <span class="value red">IT &amp; AI Coordinator</span>
+    </div>
+  </div>
+</section>
 
-    <div class="result-count" id="result-count"></div>
+<!-- DIRECTORY -->
+<section class="directory">
+  <div class="dir-header">
+    <div class="dir-num">Section 01 — Directory</div>
+    <div class="dir-title-wrap">
+      <div class="dir-title">
+        Every guide we've written — <span class="alt">browse, search, filter.</span>
+      </div>
+      <div class="result-count" id="result-count">
+        <span class="num" id="visible-count">02</span> / <span id="total-count-2">02</span> visible
+      </div>
+    </div>
+  </div>
 
-    <!-- Guides grid -->
-    <div class="guides" id="guides">
+  <!-- Search -->
+  <div class="controls">
+    <div class="controls-label">Search &amp; Filter</div>
+    <div class="controls-main">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          type="text"
+          class="search-input"
+          id="search"
+          placeholder="Search by title, description, or tag…"
+          autocomplete="off"
+          spellcheck="false"
+        >
+        <button class="clear-search" id="clear-search" aria-label="Clear search">Clear</button>
+        <span class="search-hint" id="search-hint">Press <strong>/</strong> to search</span>
+      </div>
 
-      <a href="/using-claude"
-         class="guide"
-         data-title="How to Use Claude at PGC"
-         data-desc="End-user guide for staff. Getting set up, what Claude is good at, how to structure prompts, and how Paradigm uses Claude day-to-day."
-         data-tags="all-staff ai">
-        <div class="guide-title">How to Use Claude at PGC</div>
-        <div class="guide-desc">
+      <div class="filters-wrap" id="filters">
+        <span class="filters-label">Filter →</span>
+        <button class="chip" data-filter="all-staff">For all staff</button>
+        <button class="chip" data-filter="it">For IT / admins</button>
+        <button class="chip" data-filter="ai">AI / Claude</button>
+        <button class="chip" data-filter="microsoft-365">Microsoft 365</button>
+        <button class="chip" data-filter="setup">Setup</button>
+        <button class="reset-all" id="reset-all">↺ Reset all</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guides list -->
+  <div class="guides" id="guides">
+
+    <a href="/using-claude"
+       class="guide"
+       data-title="How to Use Claude at PGC"
+       data-desc="End-user guide for staff. Getting set up, what Claude is good at, how to structure prompts, and how Paradigm uses Claude day-to-day."
+       data-tags="all-staff ai">
+      <div class="guide-num">0<span class="slash">/</span>1</div>
+      <div class="guide-body">
+        <span class="guide-eyebrow">For everyone at PGC</span>
+        <h2 class="guide-title">How to Use Claude at PGC</h2>
+        <p class="guide-desc">
           End-user guide for staff. Getting set up, what Claude is good at, how to
           structure prompts, and how Paradigm uses Claude day-to-day.
-        </div>
+        </p>
         <div class="guide-tags">
           <span class="guide-tag audience">For all staff</span>
-          <span class="guide-tag">AI</span>
-          <span class="guide-meta">Updated May 2026</span>
+          <span class="guide-tag topic">AI / Claude</span>
         </div>
-      </a>
+      </div>
+      <div class="guide-side">
+        <div class="guide-meta">Updated <span class="red">May 2026</span></div>
+        <div class="guide-meta">~ 12 min read</div>
+        <div class="guide-arrow"><span>Read guide</span><span class="arrow">→</span></div>
+      </div>
+    </a>
 
-      <a href="/claude-m365-setup"
-         class="guide"
-         data-title="Connecting Claude to Microsoft 365"
-         data-desc="Technical briefing covering how Claude integrates with our M365 tenant, which connectors are wired up, and what data Claude can and cannot see."
-         data-tags="it ai microsoft-365 setup">
-        <div class="guide-title">Connecting Claude to Microsoft 365</div>
-        <div class="guide-desc">
+    <a href="/claude-m365-setup"
+       class="guide"
+       data-title="Connecting Claude to Microsoft 365"
+       data-desc="Technical briefing covering how Claude integrates with our M365 tenant, which connectors are wired up, and what data Claude can and cannot see."
+       data-tags="it ai microsoft-365 setup">
+      <div class="guide-num">0<span class="slash">/</span>2</div>
+      <div class="guide-body">
+        <span class="guide-eyebrow">For IT &amp; Admins</span>
+        <h2 class="guide-title">Connecting Claude to Microsoft 365</h2>
+        <p class="guide-desc">
           Technical briefing covering how Claude integrates with our M365 tenant,
           which connectors are wired up, and what data Claude can and cannot see.
-        </div>
+        </p>
         <div class="guide-tags">
           <span class="guide-tag audience">For IT / admins</span>
-          <span class="guide-tag">AI</span>
-          <span class="guide-tag">Microsoft 365</span>
-          <span class="guide-tag">Setup</span>
-          <span class="guide-meta">Updated May 2026</span>
+          <span class="guide-tag topic">AI / Claude</span>
+          <span class="guide-tag topic">Microsoft 365</span>
+          <span class="guide-tag topic">Setup</span>
         </div>
-      </a>
+      </div>
+      <div class="guide-side">
+        <div class="guide-meta">Updated <span class="red">May 2026</span></div>
+        <div class="guide-meta">~ 18 min read</div>
+        <div class="guide-arrow"><span>Read guide</span><span class="arrow">→</span></div>
+      </div>
+    </a>
 
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty" id="empty">
+    <div class="empty-num">0/0</div>
+    <div class="empty-title">No guides match your search.</div>
+    <div class="empty-hint">Try a different keyword or reset the filters to see everything.</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="label">About this library</div>
+      <p>Internal documentation for staff across the Paradigm Group of Companies — including <strong>PGC, PBS, Paradigm Solar, BuildForth, and StokedLiving</strong>. New guides are added as we identify them.</p>
     </div>
-
-    <!-- Empty state -->
-    <div class="empty" id="empty">
-      <div class="empty-title">No guides match your search.</div>
-      <div class="empty-hint">Try a different keyword or reset the filters.</div>
+    <div>
+      <div class="label">Found something missing?</div>
+      <p>If a topic should have a guide but doesn't, message the maintainer. We write them as we learn — your suggestion is welcome.</p>
     </div>
+    <div>
+      <div class="label">Maintainer</div>
+      <p><strong>Deeparsh Singh Dang</strong><br>IT &amp; AI Coordinator<br><a href="mailto:deeparsh.dang@pgc.ca">deeparsh.dang@pgc.ca</a></p>
+    </div>
+  </div>
+  <div class="footer-end">
+    <div class="footer-mark">
+      <span class="mark"></span>
+      <span>Paradigm Group of Companies · Internal Use Only</span>
+    </div>
+    <div class="red">Future Ready Homes. Built Today.</div>
+  </div>
+</footer>
 
-    <footer>
-      <p><strong>Internal use only.</strong> Do not share these links externally.</p>
-      <p>Maintained by IT &amp; AI Coordinator. Questions: <a href="mailto:deeparsh.dang@pgc.ca">deeparsh.dang@pgc.ca</a></p>
-    </footer>
-
-  </main>
+</div>
 
 <script>
   // ────── State ──────
   const activeFilters = new Set();
   const searchInput = document.getElementById('search');
   const clearSearchBtn = document.getElementById('clear-search');
+  const searchHint = document.getElementById('search-hint');
   const resetAllBtn = document.getElementById('reset-all');
-  const resultCount = document.getElementById('result-count');
+  const visibleCount = document.getElementById('visible-count');
+  const totalCount = document.getElementById('total-count');
+  const totalCount2 = document.getElementById('total-count-2');
   const empty = document.getElementById('empty');
   const guides = Array.from(document.querySelectorAll('.guide'));
   const chips = Array.from(document.querySelectorAll('.chip'));
+
+  // Initialize total counts
+  totalCount.textContent = String(guides.length).padStart(2, '0');
+  totalCount2.textContent = String(guides.length).padStart(2, '0');
 
   // ────── Filter logic ──────
   function applyFilters() {
@@ -410,14 +875,12 @@
       const desc = (guide.dataset.desc || '').toLowerCase();
       const tags = (guide.dataset.tags || '').toLowerCase().split(/\s+/);
 
-      // Search match: empty query OR query appears in title/desc/tags
       const searchMatch =
         !q ||
         title.includes(q) ||
         desc.includes(q) ||
         tags.some(t => t.includes(q));
 
-      // Filter match: no filters active OR card has at least one active filter tag
       const filterMatch =
         activeFilters.size === 0 ||
         Array.from(activeFilters).some(f => tags.includes(f));
@@ -430,28 +893,19 @@
       }
     });
 
-    // Result count
-    if (q || activeFilters.size > 0) {
-      resultCount.textContent =
-        visible === 0 ? '' :
-        visible === 1 ? '1 guide' :
-        `${visible} guides`;
-    } else {
-      resultCount.textContent = '';
-    }
-
-    // Empty state
+    visibleCount.textContent = String(visible).padStart(2, '0');
     empty.classList.toggle('visible', visible === 0);
-
-    // Clear-search button visibility
     clearSearchBtn.classList.toggle('visible', !!q);
-
-    // Reset-all button visibility
+    searchHint.classList.toggle('hidden', !!q || document.activeElement === searchInput);
     resetAllBtn.classList.toggle('visible', !!q || activeFilters.size > 0);
   }
 
   // ────── Wire up search input ──────
   searchInput.addEventListener('input', applyFilters);
+  searchInput.addEventListener('focus', () => searchHint.classList.add('hidden'));
+  searchInput.addEventListener('blur', () => {
+    if (!searchInput.value) searchHint.classList.remove('hidden');
+  });
 
   clearSearchBtn.addEventListener('click', () => {
     searchInput.value = '';
@@ -493,6 +947,19 @@
       searchInput.blur();
     }
   });
+
+  // ────── Reveal animations ──────
+  const revealEls = document.querySelectorAll('.hero, .directory, footer');
+  revealEls.forEach(el => el.classList.add('reveal'));
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.05 });
+  revealEls.forEach(el => obs.observe(el));
 
   // Initial state
   applyFilters();
