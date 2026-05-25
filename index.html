@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="referrer" content="no-referrer">
+<title>Paradigm Internal Guides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F2EEE5;
+    --paper-deep: #EAE4D6;
+    --ink: #161513;
+    --ink-soft: #4A453D;
+    --ink-faint: #8A8378;
+    --rule: #1A1916;
+    --red: #C8202C;
+    --red-deep: #962027;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Catamaran', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  main {
+    max-width: 720px;
+    width: 100%;
+  }
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--red);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    margin-bottom: 16px;
+  }
+  .lede {
+    font-size: 18px;
+    color: var(--ink-soft);
+    margin-bottom: 48px;
+    max-width: 540px;
+  }
+  .guides {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 56px;
+  }
+  .guide {
+    display: block;
+    padding: 28px 28px;
+    background: var(--paper-deep);
+    border: 1px solid rgba(26, 25, 22, 0.08);
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  .guide:hover {
+    background: #fff;
+    border-color: var(--red);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+  .guide-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .guide-desc {
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .guide-meta {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--ink-faint);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .guide-meta span {
+    display: inline-flex;
+    align-items: center;
+  }
+  .guide-meta .pill {
+    background: rgba(200, 32, 44, 0.08);
+    color: var(--red-deep);
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+  }
+  footer {
+    border-top: 1px solid rgba(26, 25, 22, 0.1);
+    padding-top: 24px;
+    font-size: 13px;
+    color: var(--ink-faint);
+    width: 100%;
+    max-width: 720px;
+  }
+  footer p { margin-bottom: 6px; }
+  footer a { color: var(--ink-soft); text-decoration: none; border-bottom: 1px solid rgba(26, 25, 22, 0.2); }
+  footer a:hover { color: var(--red); border-bottom-color: var(--red); }
+</style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">Paradigm Group of Companies</div>
+    <h1>Internal Guides</h1>
+    <p class="lede">
+      Living documentation for staff. Bookmark this page. Updated as we learn.
+    </p>
+
+    <div class="guides">
+      <a href="/using-claude" class="guide">
+        <div class="guide-title">How to Use Claude at PGC</div>
+        <div class="guide-desc">
+          End-user guide for staff. Getting set up, what Claude is good at, how to
+          structure prompts, and how Paradigm uses it day-to-day.
+        </div>
+        <div class="guide-meta">
+          <span class="pill">For all staff</span>
+          <span>Updated May 2026</span>
+        </div>
+      </a>
+
+      <a href="/claude-m365-setup" class="guide">
+        <div class="guide-title">Connecting Claude to Microsoft 365</div>
+        <div class="guide-desc">
+          Technical briefing covering how Claude integrates with our M365 tenant,
+          which connectors are wired up, and what data Claude can and cannot see.
+        </div>
+        <div class="guide-meta">
+          <span class="pill">For IT / admins</span>
+          <span>Updated May 2026</span>
+        </div>
+      </a>
+    </div>
+
+    <footer>
+      <p><strong>Internal use only.</strong> Do not share these links externally.</p>
+      <p>Maintained by IT &amp; AI Coordinator. Questions: <a href="mailto:deeparsh.dang@pgc.ca">deeparsh.dang@pgc.ca</a></p>
+    </footer>
+  </main>
+</body>
+</html>

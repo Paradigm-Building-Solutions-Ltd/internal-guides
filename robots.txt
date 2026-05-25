@@ -1,0 +1,24 @@
+# Paradigm internal guides — DO NOT INDEX
+# These pages are internal-only. Search engines should not crawl or index them.
+
+User-agent: *
+Disallow: /
+
+# AI training crawlers (extra explicit — they sometimes ignore the * rule)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /

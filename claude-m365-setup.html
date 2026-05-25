@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="referrer" content="no-referrer">
+<title>Connecting Claude to Microsoft 365 — Internal Briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F2EEE5;
+    --paper-deep: #EAE4D6;
+    --ink: #161513;
+    --ink-soft: #4A453D;
+    --ink-faint: #8A8378;
+    --rule: #1A1916;
+    --red: #C8202C;
+    --red-deep: #962027;
+    --red-tint: rgba(200, 32, 44, 0.08);
+    --gold: #B68A35;
+    --green: #2F4F36;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Catamaran', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-weight: 400;
+    line-height: 1.55;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Paper grain texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(0,0,0,0.012) 1px, transparent 1px),
+      radial-gradient(circle at 70% 70%, rgba(0,0,0,0.012) 1px, transparent 1px),
+      radial-gradient(circle at 40% 80%, rgba(0,0,0,0.008) 1px, transparent 1px);
+    background-size: 4px 4px, 6px 6px, 5px 5px;
+    z-index: 1;
+    opacity: 0.6;
+  }
+
+  /* Architectural grid background */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgba(22,21,19,0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(22,21,19,0.025) 1px, transparent 1px);
+    background-size: 80px 80px;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 56px;
+  }
+
+  /* ============ TOP BAR ============ */
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(242, 238, 229, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(22,21,19,0.08);
+  }
+  .topbar-inner {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 14px 56px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 14px; }
+  .topbar-mark {
+    width: 22px; height: 22px;
+    background: var(--red);
+    display: inline-block;
+    position: relative;
+  }
+  .topbar-mark::after {
+    content: '';
+    position: absolute;
+    top: 4px; left: 4px;
+    width: 14px; height: 14px;
+    background: var(--paper);
+  }
+  .topbar-meta { color: var(--ink-faint); font-weight: 500; }
+
+  .progress {
+    position: fixed;
+    top: 49px;
+    left: 0;
+    height: 2px;
+    background: var(--red);
+    z-index: 99;
+    width: 0;
+    transition: width 0.1s linear;
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 200px 0 100px;
+    position: relative;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink-soft);
+    margin-bottom: 40px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 48px;
+    height: 2px;
+    background: var(--red);
+  }
+  .eyebrow .sep { color: var(--ink-faint); font-weight: 400; }
+  .eyebrow .lead { color: var(--red); font-weight: 800; }
+
+  .hero h1 {
+    font-size: clamp(48px, 7.5vw, 108px);
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    margin-bottom: 48px;
+    max-width: 18ch;
+  }
+  .hero h1 .accent { color: var(--red); font-style: italic; font-weight: 900; }
+  .hero h1 .line { display: block; }
+
+  .hero-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(22,21,19,0.15);
+  }
+  .meta-block .label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+    display: block;
+  }
+  .meta-block .value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .meta-block .value.red { color: var(--red); }
+
+  /* ============ TLDR BLOCK ============ */
+  .tldr {
+    margin: 80px 0 0;
+    padding: 64px 72px;
+    background: var(--ink);
+    color: var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+  .tldr::before {
+    content: 'TL;DR';
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    font-weight: 800;
+    color: var(--red);
+  }
+  .tldr-label {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--red);
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+  .tldr p {
+    font-size: 22px;
+    line-height: 1.5;
+    font-weight: 400;
+    max-width: 75ch;
+    color: rgba(242,238,229,0.92);
+  }
+  .tldr p + p { margin-top: 20px; }
+  .tldr strong {
+    color: var(--paper);
+    font-weight: 700;
+    border-bottom: 2px solid var(--red);
+    padding-bottom: 1px;
+  }
+  .tldr .num {
+    color: var(--red);
+    font-weight: 800;
+  }
+
+  /* ============ SECTION ============ */
+  section.chapter {
+    padding: 120px 0 40px;
+    position: relative;
+  }
+
+  .chapter-header {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 48px;
+    margin-bottom: 64px;
+    align-items: start;
+  }
+  .chapter-num {
+    font-size: 80px;
+    font-weight: 800;
+    line-height: 0.85;
+    color: var(--red);
+    letter-spacing: -0.02em;
+    position: relative;
+  }
+  .chapter-num::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--ink);
+    margin-top: 16px;
+  }
+  .chapter-title-wrap .label {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink-faint);
+    margin-bottom: 16px;
+    display: block;
+  }
+  .chapter-title {
+    font-size: clamp(34px, 4vw, 56px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    max-width: 22ch;
+  }
+  .chapter-title .alt { font-style: italic; color: var(--red); font-weight: 700; }
+
+  /* ============ CONTENT BODY ============ */
+  .body-grid {
+    display: grid;
+    grid-template-columns: 180px 1fr 220px;
+    gap: 48px;
+    align-items: start;
+  }
+  .body-grid > .body-main { grid-column: 2; }
+  .body-grid > .body-margin { grid-column: 3; }
+  .body-grid > .body-margin-left { grid-column: 1; }
+
+  .body-main p {
+    font-size: 18px;
+    line-height: 1.65;
+    margin-bottom: 22px;
+    max-width: 64ch;
+  }
+  .body-main p.lead {
+    font-size: 24px;
+    line-height: 1.45;
+    font-weight: 500;
+    margin-bottom: 36px;
+    color: var(--ink);
+  }
+  .body-main p.lead .red { color: var(--red); font-weight: 700; }
+
+  .body-main strong { font-weight: 700; }
+  .body-main em { font-style: italic; color: var(--ink-soft); }
+
+  /* Inline term definitions */
+  .term {
+    display: inline-block;
+    background: var(--red-tint);
+    color: var(--red-deep);
+    padding: 1px 8px;
+    border-radius: 2px;
+    font-weight: 600;
+  }
+
+  /* ============ GLOSSARY-STYLE BOXES ============ */
+  .define-block {
+    margin: 48px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    border-top: 2px solid var(--ink);
+    padding-top: 32px;
+  }
+  .define-item {
+    position: relative;
+  }
+  .define-item::before {
+    content: attr(data-num);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    font-weight: 800;
+    color: var(--red);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .define-item .term-name {
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .define-item .term-def {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .define-item .term-example {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink);
+    padding: 10px 14px;
+    border-left: 3px solid var(--red);
+    background: rgba(255,255,255,0.5);
+  }
+  .define-item .term-example strong { font-style: normal; color: var(--red-deep); }
+
+  /* ============ MARGIN NOTES ============ */
+  .margin-note {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    padding-left: 16px;
+    border-left: 2px solid var(--red);
+    position: sticky;
+    top: 80px;
+  }
+  .margin-note .mnum {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    font-weight: 800;
+    color: var(--red);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .margin-note .mtitle {
+    font-weight: 700;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+
+  /* ============ PULL QUOTE ============ */
+  .pullquote {
+    margin: 56px -40px;
+    padding: 40px 48px;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    position: relative;
+    border-top: 4px solid var(--red);
+    border-bottom: 4px solid var(--red);
+    max-width: 30ch;
+  }
+  .pullquote .qmark {
+    color: var(--red);
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 0.6;
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: -8px;
+  }
+  .pullquote .source {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    font-weight: 700;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-top: 20px;
+  }
+
+  /* ============ CONNECTION METHODS LIST ============ */
+  .methods {
+    margin-top: 24px;
+  }
+  .method {
+    display: grid;
+    grid-template-columns: 80px 1fr 180px;
+    gap: 48px;
+    padding: 48px 0;
+    border-top: 1px solid rgba(22,21,19,0.18);
+    align-items: start;
+    position: relative;
+  }
+  .method:last-child { border-bottom: 1px solid rgba(22,21,19,0.18); }
+  .method-num {
+    font-size: 48px;
+    font-weight: 200;
+    line-height: 0.9;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+  .method-num .slash { color: var(--red); font-weight: 600; }
+
+  .method-body h3 {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .method-body .subtitle {
+    font-size: 14px;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+  .method-body p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    max-width: 62ch;
+  }
+  .method-body ul {
+    list-style: none;
+    margin: 16px 0;
+  }
+  .method-body ul li {
+    padding-left: 24px;
+    position: relative;
+    margin-bottom: 8px;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .method-body ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 12px;
+    height: 2px;
+    background: var(--red);
+  }
+  .method-body .label-row {
+    margin-top: 18px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .pill {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 5px 10px;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+  }
+  .pill.go { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .pill.maybe { background: var(--paper); color: var(--ink); }
+  .pill.skip { background: var(--red); color: var(--paper); border-color: var(--red); }
+  .pill.cost { background: var(--paper-deep); color: var(--ink); }
+
+  .method-verdict {
+    background: var(--paper-deep);
+    padding: 20px;
+    border-left: 3px solid var(--red);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .method-verdict .vlabel {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 8px;
+    display: block;
+  }
+  .method-verdict .vbody {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ============ OFFICE ADDIN DEEP DIVE ============ */
+  .office-block {
+    margin: 56px 0 24px;
+    background: var(--paper-deep);
+    padding: 56px 64px;
+    position: relative;
+  }
+  .office-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 6px;
+    background: linear-gradient(90deg, var(--red) 0%, var(--red) 25%, var(--ink) 25%, var(--ink) 100%);
+  }
+  .office-block h4 {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .office-block .sub {
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin-bottom: 24px;
+  }
+  .office-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 28px;
+  }
+  .office-grid h5 {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--red);
+    margin-bottom: 14px;
+  }
+  .office-grid p { font-size: 15px; line-height: 1.55; margin-bottom: 12px; }
+  .office-grid ol {
+    counter-reset: step;
+    list-style: none;
+  }
+  .office-grid ol li {
+    counter-increment: step;
+    padding-left: 36px;
+    position: relative;
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .office-grid ol li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 0;
+    width: 24px; height: 24px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 11px;
+  }
+
+  /* ============ PERMISSIONS TABLE ============ */
+  .perms-wrap {
+    margin: 32px 0;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+  .perm-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    gap: 32px;
+    padding: 22px 0;
+    border-bottom: 1px solid rgba(22,21,19,0.12);
+    align-items: start;
+  }
+  .perm-row:last-child { border-bottom: none; }
+  .perm-row.head {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 16px;
+    margin: 0 -16px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .perm-row.head > div { padding: 0; }
+  .perm-category {
+    font-weight: 800;
+    font-size: 17px;
+    color: var(--red);
+    letter-spacing: -0.01em;
+  }
+  .perm-list {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    font-family: 'Catamaran', sans-serif;
+  }
+  .perm-list code {
+    font-family: 'Catamaran', sans-serif;
+    background: var(--paper-deep);
+    padding: 1px 6px;
+    font-size: 12px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .perm-mean { font-size: 14px; line-height: 1.55; }
+
+  /* ============ COST BREAKDOWN ============ */
+  .cost-hero {
+    text-align: center;
+    margin: 32px 0 56px;
+    padding: 48px 0;
+    border-top: 4px solid var(--red);
+    border-bottom: 4px solid var(--red);
+  }
+  .cost-hero .label {
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--ink-faint);
+    margin-bottom: 12px;
+  }
+  .cost-hero .num {
+    font-size: 160px;
+    font-weight: 800;
+    line-height: 0.9;
+    color: var(--red);
+    letter-spacing: -0.04em;
+  }
+  .cost-hero .currency { font-size: 80px; vertical-align: 36px; color: var(--ink); margin-right: 8px; font-weight: 600; }
+  .cost-hero .sublabel {
+    font-size: 15px;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin-top: 12px;
+  }
+
+  .cost-table {
+    margin: 24px 0;
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .cost-table th {
+    text-align: left;
+    padding: 14px 0;
+    border-bottom: 2px solid var(--ink);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+  .cost-table td {
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(22,21,19,0.15);
+    font-size: 15px;
+    vertical-align: top;
+  }
+  .cost-table td:nth-child(1) { font-weight: 600; }
+  .cost-table td:nth-child(2) { font-weight: 700; color: var(--red); width: 140px; }
+  .cost-table td:nth-child(3) { color: var(--ink-soft); }
+
+  /* ============ TIMELINE / PLAN ============ */
+  .plan {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin: 32px 0;
+  }
+  .phase {
+    padding: 48px 40px 48px 0;
+    border-right: 1px solid rgba(22,21,19,0.2);
+    position: relative;
+  }
+  .phase:nth-child(2) { padding-left: 40px; padding-right: 0; border-right: none; }
+  .phase-tag {
+    display: inline-block;
+    background: var(--red);
+    color: var(--paper);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 800;
+    padding: 5px 10px;
+    margin-bottom: 18px;
+  }
+  .phase-num {
+    font-size: 72px;
+    font-weight: 200;
+    line-height: 0.9;
+    color: var(--ink);
+    letter-spacing: -0.04em;
+    margin-bottom: 8px;
+  }
+  .phase-title {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+  .phase-when {
+    font-size: 13px;
+    color: var(--red);
+    font-weight: 700;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+  }
+  .phase ol {
+    list-style: none;
+    counter-reset: phasestep;
+  }
+  .phase ol li {
+    counter-increment: phasestep;
+    padding-left: 32px;
+    position: relative;
+    margin-bottom: 14px;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .phase ol li::before {
+    content: counter(phasestep, decimal-leading-zero);
+    position: absolute;
+    left: 0; top: 0;
+    color: var(--red);
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+  }
+  .skip-list {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 2px solid var(--ink);
+  }
+  .skip-list .head {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--red);
+    margin-bottom: 14px;
+  }
+  .skip-list ul { list-style: none; }
+  .skip-list ul li {
+    font-size: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(22,21,19,0.1);
+    color: var(--ink-soft);
+    text-decoration: line-through;
+    text-decoration-color: var(--red);
+    text-decoration-thickness: 2px;
+  }
+  .skip-list ul li:last-child { border-bottom: none; }
+
+  /* ============ QUESTIONS LIST ============ */
+  .qlist {
+    margin: 32px 0;
+  }
+  .qitem {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 24px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(22,21,19,0.12);
+    align-items: start;
+  }
+  .qnum {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    font-weight: 800;
+    color: var(--red);
+    padding-top: 2px;
+  }
+  .qbody .qtopic {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.005em;
+  }
+  .qbody .qtext {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* ============ FRAMING QUOTE ============ */
+  .framing {
+    margin: 80px -56px 0;
+    padding: 96px 56px;
+    background: var(--ink);
+    color: var(--paper);
+    text-align: left;
+    position: relative;
+  }
+  .framing-inner {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 56px;
+  }
+  .framing .label {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--red);
+    margin-bottom: 32px;
+  }
+  .framing .quote {
+    font-size: clamp(28px, 3.2vw, 44px);
+    font-weight: 500;
+    line-height: 1.3;
+    max-width: 28ch;
+    letter-spacing: -0.015em;
+  }
+  .framing .quote .em { color: var(--red); font-style: italic; font-weight: 700; }
+  .framing .attribution {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink-faint);
+    margin-top: 40px;
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    margin-top: 0;
+    padding: 64px 0 32px;
+    border-top: 4px double rgba(22,21,19,0.2);
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+  .footer-grid .label {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--ink-faint);
+    margin-bottom: 12px;
+  }
+  .footer-grid p { font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
+  .footer-grid p strong { color: var(--ink); font-weight: 700; }
+  .footer-end {
+    padding-top: 32px;
+    border-top: 1px solid rgba(22,21,19,0.15);
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ink-faint);
+  }
+  .footer-end .red { color: var(--red); }
+
+  /* ============ NAV DOTS ============ */
+  .nav-dots {
+    position: fixed;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .nav-dots a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 0;
+    text-decoration: none;
+    color: var(--ink-faint);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: color 0.3s;
+    justify-content: flex-end;
+  }
+  .nav-dots a .dot {
+    width: 8px;
+    height: 8px;
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 50%;
+    transition: all 0.3s;
+  }
+  .nav-dots a .lbl {
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .nav-dots a:hover .lbl, .nav-dots a.active .lbl { opacity: 1; }
+  .nav-dots a:hover { color: var(--red); }
+  .nav-dots a:hover .dot, .nav-dots a.active .dot {
+    background: var(--red);
+    border-color: var(--red);
+  }
+  .nav-dots a.active { color: var(--red); }
+
+  /* ============ ANIMATIONS ============ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 1100px) {
+    .nav-dots { display: none; }
+    .container { padding: 0 40px; }
+    .body-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .body-grid > .body-main { grid-column: 1; }
+    .body-grid > .body-margin { grid-column: 1; max-width: 70ch; }
+    .body-grid > .body-margin-left { grid-column: 1; }
+    .chapter-header { grid-template-columns: 1fr; gap: 20px; }
+    .define-block { grid-template-columns: 1fr; gap: 24px; }
+    .method { grid-template-columns: 60px 1fr; gap: 24px; }
+    .method-verdict { grid-column: 2; margin-top: 16px; }
+    .office-grid { grid-template-columns: 1fr; gap: 32px; }
+    .plan { grid-template-columns: 1fr; }
+    .phase { padding: 32px 0; border-right: none; border-bottom: 1px solid rgba(22,21,19,0.2); }
+    .phase:nth-child(2) { padding-left: 0; }
+    .hero-meta { grid-template-columns: 1fr 1fr; }
+    .perm-row { grid-template-columns: 1fr; gap: 8px; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .pullquote { margin: 40px 0; max-width: none; }
+    .office-block { padding: 32px; }
+    .tldr { padding: 40px 32px; }
+  }
+
+  @media (max-width: 640px) {
+    .container { padding: 0 24px; }
+    .topbar-inner { padding: 12px 24px; }
+    .hero { padding: 140px 0 60px; }
+    .hero-meta { grid-template-columns: 1fr; gap: 20px; }
+    .tldr p { font-size: 18px; }
+    .cost-hero .num { font-size: 100px; }
+    .cost-hero .currency { font-size: 56px; vertical-align: 22px; }
+    .framing { margin: 48px -24px 0; padding: 64px 24px; }
+    .framing-inner { padding: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-brand">
+      <span class="topbar-mark"></span>
+      <span>Paradigm Group of Companies</span>
+    </div>
+    <div class="topbar-meta">Internal Briefing · IT & AI · 22 May 2026</div>
+  </div>
+</div>
+<div class="progress" id="progress"></div>
+
+<!-- NAV DOTS -->
+<nav class="nav-dots" id="navDots">
+  <a href="#opening" class="active"><span class="lbl">Opening</span><span class="dot"></span></a>
+  <a href="#glossary"><span class="lbl">Plain English</span><span class="dot"></span></a>
+  <a href="#main"><span class="lbl">The Connector</span><span class="dot"></span></a>
+  <a href="#methods"><span class="lbl">All Options</span><span class="dot"></span></a>
+  <a href="#office"><span class="lbl">Excel & PPT</span><span class="dot"></span></a>
+  <a href="#permissions"><span class="lbl">Permissions</span><span class="dot"></span></a>
+  <a href="#cost"><span class="lbl">Cost</span><span class="dot"></span></a>
+  <a href="#security"><span class="lbl">Security</span><span class="dot"></span></a>
+  <a href="#control"><span class="lbl">Controls</span><span class="dot"></span></a>
+  <a href="#plan"><span class="lbl">The Plan</span><span class="dot"></span></a>
+  <a href="#dave"><span class="lbl">For Dave</span><span class="dot"></span></a>
+  <a href="#open"><span class="lbl">Open Q's</span><span class="dot"></span></a>
+</nav>
+
+<div class="container">
+
+<!-- HERO -->
+<section class="hero" id="opening">
+  <div class="eyebrow">
+    <span class="lead">For our meeting</span>
+    <span class="sep">/</span>
+    <span>Connecting Claude to SharePoint &amp; Microsoft 365</span>
+    <span class="sep">/</span>
+    <span>22.05.2026</span>
+  </div>
+  <h1>
+    <span class="line">Connecting Claude</span>
+    <span class="line">to <span class="accent">our Microsoft</span></span>
+    <span class="line">world.</span>
+  </h1>
+
+  <div class="hero-meta">
+    <div class="meta-block">
+      <span class="label">Prepared for</span>
+      <span class="value">Our chat today</span>
+    </div>
+    <div class="meta-block">
+      <span class="label">Topic</span>
+      <span class="value">Claude ↔ SharePoint / M365</span>
+    </div>
+    <div class="meta-block">
+      <span class="label">Status</span>
+      <span class="value red">Ready to decide</span>
+    </div>
+    <div class="meta-block">
+      <span class="label">Incremental cost</span>
+      <span class="value red">$0</span>
+    </div>
+  </div>
+
+  <!-- TLDR -->
+  <div class="tldr">
+    <div class="tldr-label">If you only read this</div>
+    <p>Anthropic (the company that makes Claude) has built an <strong>official connector for Microsoft 365</strong> that hooks Claude into SharePoint, OneDrive, Outlook, and Teams — and it's <strong>already included in our existing Team plan at no extra cost</strong>.</p>
+    <p>It's <strong>read-only</strong>, which means Claude can search and read but never change, send, or delete anything. It only ever sees what the signed-in user can already see in Microsoft. And it only fetches data when someone explicitly asks a question that needs it.</p>
+    <p>To turn it on, we need <span class="num">two</span> green lights: one from Dave (he flips a switch on the Microsoft side), one from us (we flip a switch on the Claude side). That's it.</p>
+    <p>My take: <strong>turn it on for a small pilot group first</strong>, learn what we learn, expand from there. Skip the riskier options (browser extension on SharePoint, building our own connector). Total spend: <span class="num">zero new dollars</span>.</p>
+  </div>
+</section>
+
+<!-- CHAPTER 1: GLOSSARY -->
+<section class="chapter" id="glossary">
+  <div class="chapter-header">
+    <div class="chapter-num">01</div>
+    <div class="chapter-title-wrap">
+      <span class="label">Plain English first</span>
+      <h2 class="chapter-title">The words people will throw around — <span class="alt">what they actually mean.</span></h2>
+    </div>
+  </div>
+
+  <div class="body-grid">
+    <div class="body-main">
+      <p class="lead">Before going anywhere, here are the four bits of jargon that show up everywhere in this conversation. Once these click, the rest is easy.</p>
+
+      <div class="define-block">
+        <div class="define-item" data-num="TERM 01">
+          <div class="term-name">Microsoft 365 / SharePoint</div>
+          <div class="term-def">M365 is Microsoft's bundle of work apps — Outlook (email), Teams (chat &amp; meetings), OneDrive (your personal cloud files), SharePoint (the company-wide shared file system and intranet), Word, Excel, PowerPoint.</div>
+          <div class="term-example"><strong>Think:</strong> our company's "digital office" — wherever a file, email, or chat lives at PGC, it's somewhere inside M365.</div>
+        </div>
+
+        <div class="define-item" data-num="TERM 02">
+          <div class="term-name">Microsoft Entra Tenant</div>
+          <div class="term-def">A "tenant" is our company's private Microsoft account hub. It's the central system that holds every PGC employee's Microsoft login, what they can access, and what permissions they have. Entra is the new name for what used to be called Azure AD.</div>
+          <div class="term-example"><strong>Think:</strong> a digital filing cabinet that holds every PGC login. When Sarah types her work email and password into Outlook, she's signing into our tenant.</div>
+        </div>
+
+        <div class="define-item" data-num="TERM 03">
+          <div class="term-name">Microsoft Graph API</div>
+          <div class="term-def">An "API" is just a way for two programs to talk to each other. Microsoft Graph is the official phone line that other apps use to ask Microsoft 365 for information — emails, files, calendar events, chats.</div>
+          <div class="term-example"><strong>Think:</strong> when Claude wants to fetch a file from our SharePoint, it calls Microsoft Graph and says <em>"hey, can you get me this?"</em> — and Microsoft decides whether to hand it over.</div>
+        </div>
+
+        <div class="define-item" data-num="TERM 04">
+          <div class="term-name">MCP (Model Context Protocol)</div>
+          <div class="term-def">A new open standard for connecting AI tools (like Claude) to business apps (like SharePoint) in a clean, safe, predictable way. Created by Anthropic, now used by other AI companies too.</div>
+          <div class="term-example"><strong>Think:</strong> like USB-C for AI — one standard plug that works across many tools. Without MCP, every connection would be a custom hack. With MCP, Claude can plug into SharePoint the same way it plugs into Slack or Google Drive.</div>
+        </div>
+
+        <div class="define-item" data-num="TERM 05">
+          <div class="term-name">Delegated Permissions</div>
+          <div class="term-def">A type of permission where the app (Claude) only ever acts <em>on behalf of</em> the person signed in — and can never do anything that person can't already do themselves.</div>
+          <div class="term-example"><strong>Think:</strong> Claude is like a research assistant standing next to you. If <em>you</em> can open a folder, Claude can read it for you. If a folder is locked to <em>you</em>, it stays locked to Claude too.</div>
+        </div>
+
+        <div class="define-item" data-num="TERM 06">
+          <div class="term-name">Global Administrator</div>
+          <div class="term-def">The most senior admin role in our Microsoft tenant — the only person who can approve big tenant-wide changes like installing a new third-party app for the whole company.</div>
+          <div class="term-example"><strong>Think:</strong> Dave (or whoever holds that role at the IT contractor). They're the only ones who can say <em>"yes, this app is allowed into our PGC Microsoft world."</em></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 2: THE MAIN OPTION -->
+<section class="chapter" id="main">
+  <div class="chapter-header">
+    <div class="chapter-num">02</div>
+    <div class="chapter-title-wrap">
+      <span class="label">The headliner</span>
+      <h2 class="chapter-title">The official Microsoft 365 Connector — <span class="alt">what we should actually use.</span></h2>
+    </div>
+  </div>
+
+  <div class="body-grid">
+    <div class="body-margin-left">
+      <div class="margin-note">
+        <span class="mnum">SIDE NOTE</span>
+        <span class="mtitle">Already built</span>
+        Anthropic shipped this connector as a real product, not a beta. It's listed in the Microsoft Marketplace. We're not pioneering anything here — we're using something thousands of companies already run.
+      </div>
+    </div>
+    <div class="body-main">
+      <p class="lead">This is the one. Built by Anthropic, supported by Anthropic, designed to do exactly what we want — let Claude search and read across our Microsoft world, safely, with proper guardrails. <span class="red">No additional money. No additional software.</span></p>
+
+      <h3 style="font-size: 28px; font-weight: 800; margin: 32px 0 16px; letter-spacing: -0.01em;">What it actually does</h3>
+      <p>Once it's turned on, anyone at PGC who connects their Microsoft account can ask Claude things like:</p>
+      <ul style="list-style: none; margin: 16px 0 24px;">
+        <li style="padding: 8px 0 8px 28px; position: relative; font-size: 16px;"><span style="position:absolute; left:0; color:var(--red); font-weight:800;">→</span><em>"Find the Q4 strategic planning document in SharePoint."</em></li>
+        <li style="padding: 8px 0 8px 28px; position: relative; font-size: 16px;"><span style="position:absolute; left:0; color:var(--red); font-weight:800;">→</span><em>"Summarize the email thread with the lumber supplier about delivery delays."</em></li>
+        <li style="padding: 8px 0 8px 28px; position: relative; font-size: 16px;"><span style="position:absolute; left:0; color:var(--red); font-weight:800;">→</span><em>"What did we discuss in the Teams channel about the Buildforth site visit?"</em></li>
+        <li style="padding: 8px 0 8px 28px; position: relative; font-size: 16px;"><span style="position:absolute; left:0; color:var(--red); font-weight:800;">→</span><em>"Pull meeting notes from last week's leadership sync."</em></li>
+      </ul>
+      <p>Claude figures out which Microsoft service to look in, fetches what it needs, and answers with citations back to the source files or emails. The person asking doesn't have to download anything, upload anything, or paste anything.</p>
+
+      <h3 style="font-size: 28px; font-weight: 800; margin: 40px 0 16px; letter-spacing: -0.01em;">What it absolutely cannot do</h3>
+      <p>This is the part to emphasise. The connector is <strong>read-only</strong>. That word matters. Claude through this connector cannot:</p>
+      <ul style="list-style: none; margin: 16px 0;">
+        <li style="padding: 6px 0 6px 28px; position: relative; font-size: 16px;"><span style="position:absolute; left:0; color:var(--red); font-weight:900;">✗</span>Send an email or reply to one</li>
+        <li style="padding: 6px 0 6px 28px; position: relative; font-size: 16px;"><span style="position:absolute; left:0; color:var(--red); font-weight:900;">✗</span>Edit, create, or delete a file in SharePoint or OneDrive</li>
+        <li style="padding: 6px 0 6px 28px; position: relative; font-size: 16px;"><span style="position:absolute; left:0; color:var(--red); font-weight:900;">✗</span>Add or move a calendar event</li>
+        <li style="padding: 6px 0 6px 28px; position: relative; font-size: 16px;"><span style="position:absolute; left:0; color:var(--red); font-weight:900;">✗</span>Post a message in Teams</li>
+        <li style="padding: 6px 0 6px 28px; position: relative; font-size: 16px;"><span style="position:absolute; left:0; color:var(--red); font-weight:900;">✗</span>Change any sharing permission anywhere</li>
+        <li style="padding: 6px 0 6px 28px; position: relative; font-size: 16px;"><span style="position:absolute; left:0; color:var(--red); font-weight:900;">✗</span>See anything the signed-in user couldn't see directly in Microsoft</li>
+      </ul>
+
+      <div class="pullquote">
+        <span class="qmark">"</span>If a SharePoint folder is locked to you in Microsoft, it stays locked to Claude when it's acting on your behalf.
+        <span class="source">— What "delegated permissions" really mean</span>
+      </div>
+
+      <h3 style="font-size: 28px; font-weight: 800; margin: 40px 0 16px; letter-spacing: -0.01em;">What needs to happen to turn it on</h3>
+      <p>Two things, both one-time. After this, it just works.</p>
+
+      <div style="margin: 24px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <div style="padding: 24px; background: var(--paper-deep); border-top: 4px solid var(--red);">
+          <div style="font-size: 11px; letter-spacing: 0.22em; font-weight: 800; color: var(--red); margin-bottom: 10px;">STEP A · MICROSOFT SIDE</div>
+          <div style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">Dave grants tenant consent</div>
+          <p style="font-size: 14px; line-height: 1.55; margin: 0;">Dave (as Global Administrator) signs into the Microsoft admin centre and approves the connector for our whole tenant. This installs two small "service apps" inside our Microsoft account so the connection can exist. Takes about 5 minutes. He only does this once, ever.</p>
+        </div>
+        <div style="padding: 24px; background: var(--paper-deep); border-top: 4px solid var(--ink);">
+          <div style="font-size: 11px; letter-spacing: 0.22em; font-weight: 800; color: var(--ink); margin-bottom: 10px;">STEP B · CLAUDE SIDE</div>
+          <div style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">I enable it on our Team plan</div>
+          <p style="font-size: 14px; line-height: 1.55; margin: 0;">As a Claude organisation Owner, I go into Org Settings &gt; Connectors and add Microsoft 365 to our team. After that, each person at PGC who wants to use it goes to their own settings and clicks "Connect" to link their Microsoft account.</p>
+        </div>
+      </div>
+
+      <p>After Steps A and B, individual users can connect their own Microsoft accounts in their own Claude settings. They don't see the admin consent screen — just a quick sign-in. Done.</p>
+
+      <h3 style="font-size: 28px; font-weight: 800; margin: 40px 0 16px; letter-spacing: -0.01em;">One important caveat to know</h3>
+      <p>The connector searches across <strong>our whole SharePoint tenant</strong>, scoped to whatever each user can already see. We can't tell the connector <em>"only look in these specific SharePoint sites and ignore the others."</em> If we want certain SharePoint sites to be invisible to Claude entirely, the way to do that is on the SharePoint side — not by configuring Claude. Worth a quick conversation with Dave about whether any of our SharePoint sites have content sensitive enough that we'd want to mark them excluded at the SharePoint level.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 3: ALL METHODS -->
+<section class="chapter" id="methods">
+  <div class="chapter-header">
+    <div class="chapter-num">03</div>
+    <div class="chapter-title-wrap">
+      <span class="label">The full menu</span>
+      <h2 class="chapter-title">Every other way Claude can touch our Microsoft world — <span class="alt">the good, the meh, the avoid.</span></h2>
+    </div>
+  </div>
+
+  <div class="body-grid">
+    <div class="body-main">
+      <p class="lead">The official connector is the headline answer, but there are <span class="red">six other paths</span> Claude could touch our Microsoft files and data. Worth knowing all of them so we're not surprised later.</p>
+
+      <div class="methods">
+
+        <!-- METHOD 1 -->
+        <div class="method">
+          <div class="method-num">0<span class="slash">/</span>1</div>
+          <div class="method-body">
+            <h3>Official M365 Connector</h3>
+            <div class="subtitle">Already covered above — the headliner</div>
+            <p>Built by Anthropic, included in our Team plan, read-only, runs through Microsoft's official phone line (Graph API). This is the one we should use.</p>
+            <div class="label-row">
+              <span class="pill go">Recommended</span>
+              <span class="pill cost">Cost: $0</span>
+              <span class="pill cost">In Team plan</span>
+            </div>
+          </div>
+          <div class="method-verdict">
+            <span class="vlabel">My take</span>
+            <span class="vbody">Yes. This is the answer.</span>
+          </div>
+        </div>
+
+        <!-- METHOD 2 -->
+        <div class="method">
+          <div class="method-num">0<span class="slash">/</span>2</div>
+          <div class="method-body">
+            <h3>Claude in Excel, PowerPoint, Word &amp; Outlook</h3>
+            <div class="subtitle">A separate set of Office add-ins — different from the connector, very useful</div>
+            <p>These are little add-on tools that install <em>inside</em> Microsoft Office apps. When you open Excel or PowerPoint, Claude appears as a sidebar on the right. You can ask it questions about whatever workbook or deck you have open, and it can read and even edit those files.</p>
+            <p style="font-weight: 600;">Worth installing alongside the connector. Different use case — covered in detail in the next section.</p>
+            <div class="label-row">
+              <span class="pill go">Recommended</span>
+              <span class="pill cost">Cost: $0 (in Team plan)</span>
+              <span class="pill cost">Free add-in from Microsoft Marketplace</span>
+            </div>
+          </div>
+          <div class="method-verdict">
+            <span class="vlabel">My take</span>
+            <span class="vbody">Yes. Pairs nicely with the connector — different jobs.</span>
+          </div>
+        </div>
+
+        <!-- METHOD 3 -->
+        <div class="method">
+          <div class="method-num">0<span class="slash">/</span>3</div>
+          <div class="method-body">
+            <h3>Claude for Chrome (browser extension)</h3>
+            <div class="subtitle">An experimental tool that lets Claude actually drive a web browser</div>
+            <p>This is a Chrome browser extension where Claude can <em>see</em> your screen, <em>click buttons</em>, <em>fill forms</em>, and navigate websites for you — including SharePoint's web interface. You could literally say <em>"go into SharePoint, filter this library by date, and tell me which files are missing metadata"</em> and watch it happen.</p>
+            <p>Sounds amazing. <strong>The catch:</strong> it's still in beta, and Anthropic openly flags real risks. A malicious document or email could contain hidden instructions that trick Claude into doing something it shouldn't — like sharing a confidential file with an outside email. Because it's logged in as you, it has all your access.</p>
+            <div class="label-row">
+              <span class="pill skip">Skip for now</span>
+              <span class="pill maybe">Revisit in 6 months</span>
+              <span class="pill cost">Cost: $0 (in Team plan)</span>
+            </div>
+          </div>
+          <div class="method-verdict">
+            <span class="vlabel">My take</span>
+            <span class="vbody">Not for SharePoint at PGC yet. Risk-to-benefit doesn't work for a small IT team.</span>
+          </div>
+        </div>
+
+        <!-- METHOD 4 -->
+        <div class="method">
+          <div class="method-num">0<span class="slash">/</span>4</div>
+          <div class="method-body">
+            <h3>Manual upload / copy-paste</h3>
+            <div class="subtitle">What people do today, by hand</div>
+            <p>Always available. No setup. Someone downloads a file from SharePoint, drags it into Claude, asks a question. Fine for one-offs, terrible for anyone doing this regularly. This is what the official connector replaces.</p>
+            <div class="label-row">
+              <span class="pill maybe">Fallback only</span>
+              <span class="pill cost">Cost: $0</span>
+            </div>
+          </div>
+          <div class="method-verdict">
+            <span class="vlabel">My take</span>
+            <span class="vbody">Keep as a fallback for files outside the connector's reach.</span>
+          </div>
+        </div>
+
+        <!-- METHOD 5 -->
+        <div class="method">
+          <div class="method-num">0<span class="slash">/</span>5</div>
+          <div class="method-body">
+            <h3>Custom MCP connector (build our own)</h3>
+            <div class="subtitle">For situations where the official one isn't enough</div>
+            <p>Our Team plan lets us point Claude at a connector we build ourselves. Useful only if we ever needed something the official connector doesn't do — like having Claude <em>write</em> something back into SharePoint. It's a developer project, not a setting.</p>
+            <p><strong>We're not doing this.</strong> The official connector covers everything we need. Mentioning it only so we know it exists.</p>
+            <div class="label-row">
+              <span class="pill skip">Not doing</span>
+            </div>
+          </div>
+          <div class="method-verdict">
+            <span class="vlabel">My take</span>
+            <span class="vbody">Park it. Maybe relevant in a year if a real need shows up.</span>
+          </div>
+        </div>
+
+        <!-- METHOD 6 -->
+        <div class="method">
+          <div class="method-num">0<span class="slash">/</span>6</div>
+          <div class="method-body">
+            <h3>Direct API integration</h3>
+            <div class="subtitle">Building a custom app from scratch</div>
+            <p>We could pay Anthropic per-use through their developer API and build our own custom internal application that talks to both Claude and Microsoft directly. Real engineering project, separate billing on top of our Team plan.</p>
+            <p><strong>Also not doing.</strong> Same reasoning — the prebuilt connector solves this without code.</p>
+            <div class="label-row">
+              <span class="pill skip">Not doing</span>
+            </div>
+          </div>
+          <div class="method-verdict">
+            <span class="vlabel">My take</span>
+            <span class="vbody">Park it. Only relevant if we ever wanted a fully custom AI product.</span>
+          </div>
+        </div>
+
+        <!-- METHOD 7 -->
+        <div class="method">
+          <div class="method-num">0<span class="slash">/</span>7</div>
+          <div class="method-body">
+            <h3>Claude Cowork (desktop agent)</h3>
+            <div class="subtitle">A separate desktop tool, not specifically for M365</div>
+            <p>This is a desktop app from Anthropic that handles file management and tasks on a user's actual computer — local files, not SharePoint. It's included with <em>Premium</em> seats on Team, not Standard seats. We'd need to upgrade specific seats to access it.</p>
+            <p>Not directly relevant to this M365 question. Worth knowing exists.</p>
+            <div class="label-row">
+              <span class="pill maybe">Not now</span>
+              <span class="pill cost">Premium seat required</span>
+            </div>
+          </div>
+          <div class="method-verdict">
+            <span class="vlabel">My take</span>
+            <span class="vbody">Separate conversation, separate budget question.</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 4: OFFICE ADDINS DEEP DIVE -->
+<section class="chapter" id="office">
+  <div class="chapter-header">
+    <div class="chapter-num">04</div>
+    <div class="chapter-title-wrap">
+      <span class="label">Worth its own section</span>
+      <h2 class="chapter-title">Claude inside Excel, PowerPoint, Word &amp; Outlook — <span class="alt">a different beast, a great pairing.</span></h2>
+    </div>
+  </div>
+
+  <div class="body-grid">
+    <div class="body-main">
+      <p class="lead">These are separate from the M365 Connector — but they pair beautifully with it. The connector lets Claude <em>find</em> stuff across our M365 world. The Office add-ins let Claude work <em>inside</em> a specific document you have open. Together: complete coverage.</p>
+
+      <div class="office-block">
+        <h4>What "Office add-ins" means in plain English</h4>
+        <div class="sub">Don't worry, it's simpler than it sounds</div>
+
+        <p style="font-size: 16px; line-height: 1.6; margin-bottom: 18px;">An "add-in" is just a little extra panel that lives inside an existing app. When you install Claude's add-in for Excel, the next time you open Excel a Claude chat panel appears on the right side of the screen. You can type questions about the specific spreadsheet open in front of you — and Claude can read the cells, do analysis, and even write changes back into the workbook.</p>
+
+        <p style="font-size: 16px; line-height: 1.6;">Same idea for PowerPoint, Word, and Outlook. There's a Claude sidebar inside each one. You stay in the Office app the whole time — no copy-pasting between Claude.ai and Excel.</p>
+
+        <div class="office-grid">
+
+          <div>
+            <h5>What Claude in Excel can do</h5>
+            <p>Ask questions about specific cells, formulas, or whole sheets. Build pivot tables and analysis. Spot trends, errors, or outliers. Add columns of calculated values. Reformat data. Pull data from one tab and summarise on another. Citations show exactly which cells Claude referenced.</p>
+            <p style="font-style: italic; color: var(--ink-soft); margin-top: 12px;">"Look at the budget tab and tell me which line items are over by more than 10%."</p>
+          </div>
+
+          <div>
+            <h5>What Claude in PowerPoint can do</h5>
+            <p>Generate full editable slides from a PDF, an Excel file, or a website URL — and the slides come out in <em>our</em> branded template (Catamaran, PGC colours, the right layouts) if we set the template before generating. Restructure existing decks. Tighten messaging. Rewrite for tone.</p>
+            <p style="font-style: italic; color: var(--ink-soft); margin-top: 12px;">"Take this StokedLiving project brief and turn it into a 6-slide investor update using our deck template."</p>
+          </div>
+
+          <div>
+            <h5>What Claude in Word can do</h5>
+            <p>Read, rewrite, and edit Word documents in place. Apply tone changes (more formal, more direct). Insert summaries. Cross-reference with other open Office files (if cross-file context is turned on). Generate first drafts from prompts.</p>
+            <p style="font-style: italic; color: var(--ink-soft); margin-top: 12px;">"Rewrite this contract draft so the language matches our Paradigm brand voice."</p>
+          </div>
+
+          <div>
+            <h5>What Claude in Outlook can do</h5>
+            <p>Read the email or thread you currently have open and help draft replies, summarise long threads, extract action items, or analyse tone. Note: it only sees the email you're looking at, not your whole inbox (the connector is the one that searches across all email).</p>
+            <p style="font-style: italic; color: var(--ink-soft); margin-top: 12px;">"Summarise this 40-email thread with the building inspector and list every open question."</p>
+          </div>
+
+        </div>
+
+        <h4 style="margin-top: 48px;">How we install these — the actual steps</h4>
+        <div class="sub">Free from the Microsoft Marketplace</div>
+
+        <div class="office-grid">
+
+          <div>
+            <h5>The individual route (per person)</h5>
+            <ol>
+              <li>Open Excel (or PowerPoint, Word, Outlook) on Mac or Windows desktop.</li>
+              <li>In the ribbon, click <strong>Home → Add-ins</strong> (Windows) or <strong>Insert → Add-ins</strong> (Mac).</li>
+              <li>Search for <em>"Claude by Anthropic"</em>.</li>
+              <li>Click <strong>Add</strong>. The Claude panel appears in the sidebar.</li>
+              <li>Sign in with the same Claude account that's tied to our PGC Team plan.</li>
+              <li>Repeat in each Office app — they're separate installs but quick.</li>
+            </ol>
+          </div>
+
+          <div>
+            <h5>The deploy-to-everyone route (Dave's call)</h5>
+            <ol>
+              <li>Dave goes to the Microsoft 365 Admin Centre.</li>
+              <li>Goes to <strong>Settings → Org Settings → User-owned apps and services</strong> and confirms <em>"Let users access the Office Store"</em> is on.</li>
+              <li>Goes to <strong>Settings → Integrated apps → Add-ins</strong>.</li>
+              <li>Searches the Microsoft AppSource for <em>"Claude by Anthropic"</em>.</li>
+              <li>Deploys the add-ins to specific users or the whole org in one click.</li>
+              <li>Users open Office, sign in to Claude once — done.</li>
+            </ol>
+          </div>
+
+        </div>
+
+        <h4 style="margin-top: 48px;">The "work across files" superpower</h4>
+        <p style="font-size: 16px; line-height: 1.6;">Once you've installed Claude in more than one Office app, there's a setting called <strong>"Work across files"</strong> (in Settings inside any of the add-ins). Turn it on, and Claude can read context from <em>every</em> open Office file at once. So you could have an Excel workbook and a PowerPoint open at the same time, and ask Claude in PowerPoint to <em>"pull the Q2 numbers from the budget workbook and turn them into a summary slide."</em> It does that without you copy-pasting anything.</p>
+        <p style="font-size: 14px; color: var(--ink-soft); font-style: italic; margin-top: 12px;">Note: this cross-app context only works for files that are open at the same time. Closed files don't count.</p>
+
+        <h4 style="margin-top: 48px;">An important admin note for our setup</h4>
+        <p style="font-size: 16px; line-height: 1.6;">For Team and Enterprise plans like ours, an organisation Owner (me/you) needs to flip a toggle in Claude's Org Settings called <strong>"Office agents"</strong> to allow the add-ins to work for our team. Without that toggle on, people will install the add-in but it won't connect properly. One-click thing. I'll handle it when we're ready.</p>
+      </div>
+
+      <div class="pullquote">
+        <span class="qmark">"</span>The connector finds the file. The Office add-in works inside the file. Use both.
+        <span class="source">— How these two products complement each other</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 5: PERMISSIONS -->
+<section class="chapter" id="permissions">
+  <div class="chapter-header">
+    <div class="chapter-num">05</div>
+    <div class="chapter-title-wrap">
+      <span class="label">The fine print</span>
+      <h2 class="chapter-title">What the connector actually asks for — <span class="alt">and why each thing matters.</span></h2>
+    </div>
+  </div>
+
+  <div class="body-grid">
+    <div class="body-main">
+      <p class="lead">When the connector is approved, it asks Microsoft for permission to read specific kinds of data. Here's the full list in human terms, grouped sensibly. Dave will look at this carefully — and we can <span class="red">strip out anything we don't want</span>, individually.</p>
+
+      <div class="perms-wrap">
+        <div class="perm-row head">
+          <div>Category</div>
+          <div>What the technical permissions are</div>
+          <div>What it means in practice</div>
+        </div>
+
+        <div class="perm-row">
+          <div class="perm-category">Identity &amp; sign-in</div>
+          <div class="perm-list"><code>User.Read</code>, <code>openid</code>, <code>email</code>, <code>profile</code>, <code>offline_access</code></div>
+          <div class="perm-mean">Lets Claude confirm <em>who</em> is signed in and keep the session going. Standard stuff — every Microsoft-connected app needs this.</div>
+        </div>
+
+        <div class="perm-row">
+          <div class="perm-category">Email (Outlook)</div>
+          <div class="perm-list"><code>Mail.Read</code>, <code>Mail.ReadBasic</code>, <code>Mail.Read.Shared</code>, <code>MailboxFolder.Read</code>, <code>MailboxItem.Read</code></div>
+          <div class="perm-mean">Lets Claude read the user's emails and any shared mailboxes they already have access to. Includes archives. Can't send, reply, or delete.</div>
+        </div>
+
+        <div class="perm-row">
+          <div class="perm-category">Calendar</div>
+          <div class="perm-list"><code>Calendars.Read</code>, <code>Calendars.Read.Shared</code></div>
+          <div class="perm-mean">Lets Claude see your meetings and calendars shared with you. Can't add, move, or cancel anything.</div>
+        </div>
+
+        <div class="perm-row">
+          <div class="perm-category">Teams chat</div>
+          <div class="perm-list"><code>Chat.Read</code>, <code>Chat.ReadBasic</code>, <code>ChatMember.Read</code>, <code>ChatMessage.Read</code></div>
+          <div class="perm-mean">Lets Claude read your 1:1 and group chats in Teams. Only ones you're part of.</div>
+        </div>
+
+        <div class="perm-row">
+          <div class="perm-category">Teams channels</div>
+          <div class="perm-list"><code>Channel.ReadBasic.All</code>, <code>ChannelMessage.Read.All</code></div>
+          <div class="perm-mean">Lets Claude read messages in Teams channels you're a member of. Private channels you're not in stay invisible.</div>
+        </div>
+
+        <div class="perm-row">
+          <div class="perm-category">Meetings</div>
+          <div class="perm-list"><code>OnlineMeetings.Read</code>, <code>OnlineMeetingTranscript.Read.All</code>, <code>OnlineMeetingAiInsight.Read</code>, <code>OnlineMeetingArtifact.Read.All</code>, <code>OnlineMeetingRecording.Read.All</code></div>
+          <div class="perm-mean">Lets Claude read meeting transcripts, AI summaries, and recordings. <strong style="color: var(--red);">This is the most sensitive one</strong> — we should ask Dave whether to leave it on or strip it.</div>
+        </div>
+
+        <div class="perm-row">
+          <div class="perm-category">Files (SharePoint &amp; OneDrive)</div>
+          <div class="perm-list"><code>Files.Read</code>, <code>Files.Read.All</code>, <code>Sites.Read.All</code></div>
+          <div class="perm-mean">The core one. Lets Claude search and read files across SharePoint sites and OneDrive folders the user has access to.</div>
+        </div>
+
+        <div class="perm-row">
+          <div class="perm-category">User directory</div>
+          <div class="perm-list"><code>User.ReadBasic.All</code></div>
+          <div class="perm-mean">Lets Claude look up basic profile info of other people in our org — used mainly for finding meeting availability when someone asks <em>"when can John and I both meet?"</em></div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 26px; font-weight: 800; margin: 40px 0 16px; letter-spacing: -0.01em;">The two big admin levers</h3>
+      <p>Dave can pull either or both of these in Microsoft's admin console — they're independent dials.</p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 24px 0;">
+        <div style="padding: 28px; background: var(--paper-deep); border-left: 4px solid var(--red);">
+          <div style="font-size: 11px; letter-spacing: 0.22em; font-weight: 800; color: var(--red); margin-bottom: 12px;">LEVER 1</div>
+          <div style="font-size: 19px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.01em;">Restrict <em>who</em> can use it</div>
+          <p style="font-size: 14px; line-height: 1.55;">In Microsoft Entra, Dave can set <strong>"Assignment required = Yes"</strong> on the connector apps. Then only people he specifically assigns can connect. Easy way to start with a small pilot group and expand later.</p>
+        </div>
+        <div style="padding: 28px; background: var(--paper-deep); border-left: 4px solid var(--ink);">
+          <div style="font-size: 11px; letter-spacing: 0.22em; font-weight: 800; color: var(--ink); margin-bottom: 12px;">LEVER 2</div>
+          <div style="font-size: 19px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.01em;">Strip <em>which</em> permissions are allowed</div>
+          <p style="font-size: 14px; line-height: 1.55;">In the same console, Dave can revoke any individual permission from the list above. Don't want meeting recordings exposed? Revoke <code style="background: var(--paper); padding: 1px 5px; font-size: 12px;">OnlineMeetingRecording.Read.All</code>. The Claude tool that would use it just stops working.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 6: COST -->
+<section class="chapter" id="cost">
+  <div class="chapter-header">
+    <div class="chapter-num">06</div>
+    <div class="chapter-title-wrap">
+      <span class="label">The money question</span>
+      <h2 class="chapter-title">What this all costs us — <span class="alt">the headline and the small print.</span></h2>
+    </div>
+  </div>
+
+  <div class="body-grid">
+    <div class="body-main">
+      <p class="lead">Short answer: we don't pay anything additional to turn the connector on. It's a feature of our existing Team plan. Same for the Office add-ins.</p>
+
+      <div class="cost-hero">
+        <div class="label">Incremental Cost To PGC</div>
+        <div class="num"><span class="currency">$</span>0</div>
+        <div class="sublabel">Already paid for in our existing Team plan subscription</div>
+      </div>
+
+      <h3 style="font-size: 26px; font-weight: 800; margin: 40px 0 16px; letter-spacing: -0.01em;">The full picture, line by line</h3>
+
+      <table class="cost-table">
+        <thead>
+          <tr>
+            <th>What</th>
+            <th>Cost to us</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Microsoft 365 Connector</td>
+            <td>$0</td>
+            <td>Included on every Claude plan — even free</td>
+          </tr>
+          <tr>
+            <td>Claude in Excel, PowerPoint, Word, Outlook</td>
+            <td>$0</td>
+            <td>Free Office add-ins; requires our paid Claude plan to sign in</td>
+          </tr>
+          <tr>
+            <td>Enterprise Search across connectors</td>
+            <td>$0</td>
+            <td>Included on Team plan</td>
+          </tr>
+          <tr>
+            <td>Claude for Chrome (skipping anyway)</td>
+            <td>$0</td>
+            <td>Free, in Team plan — but we're not using it for SharePoint</td>
+          </tr>
+          <tr>
+            <td>Custom MCP / API route (skipping)</td>
+            <td>—</td>
+            <td>Pay-per-use only if we ever built something custom</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="font-size: 26px; font-weight: 800; margin: 40px 0 16px; letter-spacing: -0.01em;">For context — what our Team plan actually costs</h3>
+      <p>Useful background, in case the question comes up:</p>
+      <ul style="list-style: none; margin: 16px 0;">
+        <li style="padding: 8px 0 8px 24px; position: relative; font-size: 16px;"><span style="position:absolute; left:0; color:var(--red); font-weight:800;">›</span><strong>Standard seat:</strong> roughly $20/seat/month on annual billing (~$25 if billed monthly). Includes the M365 connector, enterprise search, admin controls, single sign-on. <strong>No model training on our data</strong> by default.</li>
+        <li style="padding: 8px 0 8px 24px; position: relative; font-size: 16px;"><span style="position:absolute; left:0; color:var(--red); font-weight:800;">›</span><strong>Premium seat:</strong> roughly $100/seat/month annual (~$125 monthly). Adds Claude Code and Cowork plus 5× more usage. Only worth it for power users.</li>
+        <li style="padding: 8px 0 8px 24px; position: relative; font-size: 16px;"><span style="position:absolute; left:0; color:var(--red); font-weight:800;">›</span><strong>Mix-and-match:</strong> we can have some people on Standard and a few on Premium in the same plan — useful cost control.</li>
+        <li style="padding: 8px 0 8px 24px; position: relative; font-size: 16px;"><span style="position:absolute; left:0; color:var(--red); font-weight:800;">›</span>Team plan caps at 150 seats. Past that we'd look at Enterprise.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 7: SECURITY -->
+<section class="chapter" id="security">
+  <div class="chapter-header">
+    <div class="chapter-num">07</div>
+    <div class="chapter-title-wrap">
+      <span class="label">The "is it safe" question</span>
+      <h2 class="chapter-title">Privacy, security, and what happens to our data — <span class="alt">the clean version.</span></h2>
+    </div>
+  </div>
+
+  <div class="body-grid">
+    <div class="body-main">
+      <p class="lead">These are the points worth stating plainly when the safety question comes up. They're not marketing — they're how the system actually works.</p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 32px 0;">
+
+        <div style="padding: 28px 0; border-top: 3px solid var(--red);">
+          <div style="font-size: 36px; font-weight: 200; color: var(--ink); line-height: 0.9; margin-bottom: 12px;">A.</div>
+          <div style="font-size: 18px; font-weight: 800; margin-bottom: 10px;">Claude can never exceed our existing Microsoft permissions</div>
+          <p style="font-size: 15px; line-height: 1.6; color: var(--ink-soft);">If our SharePoint already locks a folder away from someone, Claude is also locked out when acting for that person. It inherits, never escalates.</p>
+        </div>
+
+        <div style="padding: 28px 0; border-top: 3px solid var(--red);">
+          <div style="font-size: 36px; font-weight: 200; color: var(--ink); line-height: 0.9; margin-bottom: 12px;">B.</div>
+          <div style="font-size: 18px; font-weight: 800; margin-bottom: 10px;">Read-only, full stop</div>
+          <p style="font-size: 15px; line-height: 1.6; color: var(--ink-soft);">No writes, no edits, no sends, no deletes. Nothing in Microsoft can be modified through this connector. Worst case: Claude reads something it could already have read manually.</p>
+        </div>
+
+        <div style="padding: 28px 0; border-top: 3px solid var(--red);">
+          <div style="font-size: 36px; font-weight: 200; color: var(--ink); line-height: 0.9; margin-bottom: 12px;">C.</div>
+          <div style="font-size: 18px; font-weight: 800; margin-bottom: 10px;">Anthropic doesn't store our M365 data</div>
+          <p style="font-size: 15px; line-height: 1.6; color: var(--ink-soft);">When someone asks a question, Claude fetches what it needs through Microsoft, answers, and that data isn't kept around afterwards.</p>
+        </div>
+
+        <div style="padding: 28px 0; border-top: 3px solid var(--red);">
+          <div style="font-size: 36px; font-weight: 200; color: var(--ink); line-height: 0.9; margin-bottom: 12px;">D.</div>
+          <div style="font-size: 18px; font-weight: 800; margin-bottom: 10px;">No AI training on our content</div>
+          <p style="font-size: 15px; line-height: 1.6; color: var(--ink-soft);">Team plan default — Anthropic doesn't use our conversations or our M365 data to train their AI models.</p>
+        </div>
+
+        <div style="padding: 28px 0; border-top: 3px solid var(--red);">
+          <div style="font-size: 36px; font-weight: 200; color: var(--ink); line-height: 0.9; margin-bottom: 12px;">E.</div>
+          <div style="font-size: 18px; font-weight: 800; margin-bottom: 10px;">On-demand only</div>
+          <p style="font-size: 15px; line-height: 1.6; color: var(--ink-soft);">The connector doesn't continuously scan our data in the background. It only reaches into Microsoft when a user actively asks a question that needs it.</p>
+        </div>
+
+        <div style="padding: 28px 0; border-top: 3px solid var(--red);">
+          <div style="font-size: 36px; font-weight: 200; color: var(--ink); line-height: 0.9; margin-bottom: 12px;">F.</div>
+          <div style="font-size: 18px; font-weight: 800; margin-bottom: 10px;">Microsoft's own safety nets still apply</div>
+          <p style="font-size: 15px; line-height: 1.6; color: var(--ink-soft);">Existing data loss prevention, sensitivity labels, and sharing rules in our M365 keep working. Claude's traffic flows through Microsoft Graph, so those policies still govern it.</p>
+        </div>
+
+        <div style="padding: 28px 0; border-top: 3px solid var(--red);">
+          <div style="font-size: 36px; font-weight: 200; color: var(--ink); line-height: 0.9; margin-bottom: 12px;">G.</div>
+          <div style="font-size: 18px; font-weight: 800; margin-bottom: 10px;">Revocable at any time</div>
+          <p style="font-size: 15px; line-height: 1.6; color: var(--ink-soft);">Three independent kill switches: any user can disconnect themselves; we can turn the connector off for our whole organisation in Claude; Dave can yank consent on the Microsoft side. Any one of those cuts access.</p>
+        </div>
+
+        <div style="padding: 28px 0; border-top: 3px solid var(--red);">
+          <div style="font-size: 36px; font-weight: 200; color: var(--ink); line-height: 0.9; margin-bottom: 12px;">H.</div>
+          <div style="font-size: 18px; font-weight: 800; margin-bottom: 10px;">Fully auditable</div>
+          <p style="font-size: 15px; line-height: 1.6; color: var(--ink-soft);">Because everything runs through Microsoft Graph with each user's identity, Dave can see exactly what was queried, by whom, and when — in our existing Microsoft audit logs.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 8: WHO CONTROLS WHAT -->
+<section class="chapter" id="control">
+  <div class="chapter-header">
+    <div class="chapter-num">08</div>
+    <div class="chapter-title-wrap">
+      <span class="label">Clean separation of duties</span>
+      <h2 class="chapter-title">Who holds which keys — <span class="alt">and why that's a feature, not a bug.</span></h2>
+    </div>
+  </div>
+
+  <div class="body-grid">
+    <div class="body-main">
+      <p class="lead">The system is set up so two different parties have to cooperate. That's not bureaucracy — it's good governance. Neither side can do anything dangerous alone.</p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 32px 0;">
+
+        <div style="padding: 40px; background: var(--ink); color: var(--paper);">
+          <div style="font-size: 11px; letter-spacing: 0.22em; font-weight: 800; color: var(--red); margin-bottom: 16px;">CLAUDE SIDE — US</div>
+          <div style="font-size: 24px; font-weight: 800; margin-bottom: 20px; letter-spacing: -0.01em;">What I control as Claude org Owner</div>
+          <ul style="list-style: none;">
+            <li style="padding: 10px 0 10px 24px; position: relative; font-size: 15px; line-height: 1.5; border-bottom: 1px solid rgba(242,238,229,0.15);"><span style="position:absolute; left:0; color:var(--red);">▸</span>Whether the M365 connector exists at all for PGC</li>
+            <li style="padding: 10px 0 10px 24px; position: relative; font-size: 15px; line-height: 1.5; border-bottom: 1px solid rgba(242,238,229,0.15);"><span style="position:absolute; left:0; color:var(--red);">▸</span>Which other connectors are available to our team</li>
+            <li style="padding: 10px 0 10px 24px; position: relative; font-size: 15px; line-height: 1.5; border-bottom: 1px solid rgba(242,238,229,0.15);"><span style="position:absolute; left:0; color:var(--red);">▸</span>Who at PGC has a Claude seat</li>
+            <li style="padding: 10px 0 10px 24px; position: relative; font-size: 15px; line-height: 1.5; border-bottom: 1px solid rgba(242,238,229,0.15);"><span style="position:absolute; left:0; color:var(--red);">▸</span>What kind of seat they get (Standard vs Premium)</li>
+            <li style="padding: 10px 0 10px 24px; position: relative; font-size: 15px; line-height: 1.5;"><span style="position:absolute; left:0; color:var(--red);">▸</span>Office add-in agents toggle on/off for our team</li>
+          </ul>
+        </div>
+
+        <div style="padding: 40px; background: var(--paper-deep);">
+          <div style="font-size: 11px; letter-spacing: 0.22em; font-weight: 800; color: var(--red); margin-bottom: 16px;">MICROSOFT SIDE — DAVE</div>
+          <div style="font-size: 24px; font-weight: 800; margin-bottom: 20px; letter-spacing: -0.01em;">What Dave controls as Global Administrator</div>
+          <ul style="list-style: none;">
+            <li style="padding: 10px 0 10px 24px; position: relative; font-size: 15px; line-height: 1.5; border-bottom: 1px solid rgba(22,21,19,0.1);"><span style="position:absolute; left:0; color:var(--red);">▸</span>Whether the Claude connector is allowed in our M365 tenant at all</li>
+            <li style="padding: 10px 0 10px 24px; position: relative; font-size: 15px; line-height: 1.5; border-bottom: 1px solid rgba(22,21,19,0.1);"><span style="position:absolute; left:0; color:var(--red);">▸</span>Which specific people are allowed to use it</li>
+            <li style="padding: 10px 0 10px 24px; position: relative; font-size: 15px; line-height: 1.5; border-bottom: 1px solid rgba(22,21,19,0.1);"><span style="position:absolute; left:0; color:var(--red);">▸</span>Which specific permissions are granted vs revoked</li>
+            <li style="padding: 10px 0 10px 24px; position: relative; font-size: 15px; line-height: 1.5; border-bottom: 1px solid rgba(22,21,19,0.1);"><span style="position:absolute; left:0; color:var(--red);">▸</span>How long sign-in sessions stay active before re-auth</li>
+            <li style="padding: 10px 0 10px 24px; position: relative; font-size: 15px; line-height: 1.5;"><span style="position:absolute; left:0; color:var(--red);">▸</span>Audit log monitoring of all Claude activity</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <p style="font-size: 17px; line-height: 1.6; margin-top: 24px;">Either side can shut it all down independently. If I turn off the connector in Claude, no one at PGC can use it even if Dave's side is still approved. If Dave revokes consent in Microsoft, the Claude side becomes irrelevant. Mutual veto — strong safety net.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 9: THE PLAN -->
+<section class="chapter" id="plan">
+  <div class="chapter-header">
+    <div class="chapter-num">09</div>
+    <div class="chapter-title-wrap">
+      <span class="label">How I'd actually do this</span>
+      <h2 class="chapter-title">A phased rollout we can start <span class="alt">as soon as Dave gives the green light.</span></h2>
+    </div>
+  </div>
+
+  <div class="body-grid">
+    <div class="body-main">
+      <p class="lead">I'd resist turning this on for everyone at once. Better to run a small pilot, prove it out, learn the quirks specific to our SharePoint structure, then expand. <span class="red">Two phases.</span></p>
+
+      <div class="plan">
+
+        <div class="phase">
+          <span class="phase-tag">Pilot</span>
+          <div class="phase-num">01</div>
+          <div class="phase-title">Small group, real workflows</div>
+          <div class="phase-when">Weeks 1–3 after Dave approves</div>
+          <ol>
+            <li>Dave grants the one-time Microsoft tenant consent (5 minutes).</li>
+            <li>Dave restricts who can use it to a small pilot group via "Assignment required" in Microsoft Entra.</li>
+            <li>If we want to strip specific permissions (e.g. meeting recordings), Dave revokes those now.</li>
+            <li>I enable the connector on the Claude organisation side.</li>
+            <li>Pilot group: me, you (Amy), one person from PGC, one from Paradigm Solar, one from Buildforth or StokedLiving — five people total.</li>
+            <li>Each person connects their own Microsoft account and uses it in real work for two weeks.</li>
+            <li>We track what worked, what surprised us, what made anyone uncomfortable.</li>
+            <li>Install Claude in Excel and PowerPoint add-ins for the same pilot group while we're at it.</li>
+          </ol>
+        </div>
+
+        <div class="phase">
+          <span class="phase-tag">Expansion</span>
+          <div class="phase-num">02</div>
+          <div class="phase-title">Broader rollout, with guardrails</div>
+          <div class="phase-when">Weeks 4–8</div>
+          <ol>
+            <li>Document an internal usage policy — what to put in prompts, what not to, what to do if Claude shows you something you didn't expect to be able to see.</li>
+            <li>Quick training: a 30-minute session per division on how to use this without surprises.</li>
+            <li>Dave expands the assignment in Microsoft Entra to the full team or specific departments based on what we learned.</li>
+            <li>Roll out the Office add-ins more broadly through Dave's central deployment.</li>
+            <li>Set a calendar reminder to review usage and permissions at 60 and 120 days.</li>
+            <li>Plan a more formal SharePoint hygiene pass with Dave before opening to everyone — make sure our permissions structure is what we think it is.</li>
+          </ol>
+        </div>
+
+      </div>
+
+      <div class="skip-list">
+        <div class="head">What I'd explicitly leave out for now</div>
+        <ul>
+          <li>Claude for Chrome on SharePoint — too risky, too new, not worth it</li>
+          <li>Custom-built MCP connectors — unnecessary, the official one covers us</li>
+          <li>Direct API integration projects — not warranted by this use case</li>
+          <li>Upgrading to Enterprise plan — not justified by M365 connector alone</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 10: FOR DAVE -->
+<section class="chapter" id="dave">
+  <div class="chapter-header">
+    <div class="chapter-num">10</div>
+    <div class="chapter-title-wrap">
+      <span class="label">Monday's meeting</span>
+      <h2 class="chapter-title">Questions to bring to Dave — <span class="alt">infrastructure side, kept separate.</span></h2>
+    </div>
+  </div>
+
+  <div class="body-grid">
+    <div class="body-main">
+      <p class="lead">These are for the Monday conversation with Dave, not for ours. Worth keeping the two conversations clean — ours is about the direction, Dave's is about the plumbing.</p>
+
+      <div class="qlist">
+
+        <div class="qitem">
+          <div class="qnum">Q.01</div>
+          <div class="qbody">
+            <div class="qtopic">Tenant readiness</div>
+            <div class="qtext">Are we on a Microsoft Entra tenant tied to a Business plan? (Almost certainly yes given our M365 setup, but worth confirming explicitly.)</div>
+          </div>
+        </div>
+
+        <div class="qitem">
+          <div class="qnum">Q.02</div>
+          <div class="qbody">
+            <div class="qtopic">Global Admin willingness</div>
+            <div class="qtext">Are you willing to grant the one-time tenant consent for the two connector apps? If not you personally, who at the IT team holds the Global Admin role?</div>
+          </div>
+        </div>
+
+        <div class="qitem">
+          <div class="qnum">Q.03</div>
+          <div class="qbody">
+            <div class="qtopic">Existing third-party app policy</div>
+            <div class="qtext">What's the established review process at the IT team for approving new enterprise apps into our tenant? Is there a security checklist I need to walk through?</div>
+          </div>
+        </div>
+
+        <div class="qitem">
+          <div class="qnum">Q.04</div>
+          <div class="qbody">
+            <div class="qtopic">Permission scoping preference</div>
+            <div class="qtext">Any specific permissions you'd want stripped from the default set? Meeting recordings, transcripts, shared mailboxes, channel messages — which would make you nervous?</div>
+          </div>
+        </div>
+
+        <div class="qitem">
+          <div class="qnum">Q.05</div>
+          <div class="qbody">
+            <div class="qtopic">User assignment strategy</div>
+            <div class="qtext">Do you prefer we restrict access by Entra group assignment, or open it to all users with a documented usage policy? Or some hybrid?</div>
+          </div>
+        </div>
+
+        <div class="qitem">
+          <div class="qnum">Q.06</div>
+          <div class="qbody">
+            <div class="qtopic">Sign-in session lifetime</div>
+            <div class="qtext">Default is 90 days of inactivity before users need to re-sign-in. Do you want that shorter for tighter security?</div>
+          </div>
+        </div>
+
+        <div class="qitem">
+          <div class="qnum">Q.07</div>
+          <div class="qbody">
+            <div class="qtopic">Sensitivity labels &amp; DLP</div>
+            <div class="qtext">Do we have any sensitivity labels or data loss prevention rules in M365 I should be aware of? Anything that would or wouldn't flow through to Claude properly?</div>
+          </div>
+        </div>
+
+        <div class="qitem">
+          <div class="qnum">Q.08</div>
+          <div class="qbody">
+            <div class="qtopic">Restricted Content Discovery sites</div>
+            <div class="qtext">Are any SharePoint sites configured to be invisible from tenant-wide search? Those will be excluded from Claude automatically — useful to know which.</div>
+          </div>
+        </div>
+
+        <div class="qitem">
+          <div class="qnum">Q.09</div>
+          <div class="qbody">
+            <div class="qtopic">Audit &amp; monitoring</div>
+            <div class="qtext">What's your preferred way to monitor what Claude is querying? Standard Entra sign-in logs and Graph audit logs, or something more proactive?</div>
+          </div>
+        </div>
+
+        <div class="qitem">
+          <div class="qnum">Q.10</div>
+          <div class="qbody">
+            <div class="qtopic">Contract &amp; compliance</div>
+            <div class="qtext">Anything in our Microsoft contract that limits third-party Graph API access? Any Canadian data residency obligations we need to honour given we're a BC company?</div>
+          </div>
+        </div>
+
+        <div class="qitem">
+          <div class="qnum">Q.11</div>
+          <div class="qbody">
+            <div class="qtopic">Incident response protocol</div>
+            <div class="qtext">If we ever needed to kill access immediately — what's the agreed protocol? Who pulls which switch first? Both work independently; worth aligning before we need it.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 11: OPEN QUESTIONS -->
+<section class="chapter" id="open">
+  <div class="chapter-header">
+    <div class="chapter-num">11</div>
+    <div class="chapter-title-wrap">
+      <span class="label">Things I still want to confirm</span>
+      <h2 class="chapter-title">Open items on our side — <span class="alt">to sharpen the plan further.</span></h2>
+    </div>
+  </div>
+
+  <div class="body-grid">
+    <div class="body-main">
+      <p class="lead">A few things that aren't blockers but would help me refine the plan as we go. We can talk these through in our meeting or after.</p>
+
+      <div class="qlist">
+        <div class="qitem">
+          <div class="qnum">○ 01</div>
+          <div class="qbody">
+            <div class="qtopic">User volume</div>
+            <div class="qtext">Roughly how many people across the PGC family of companies would realistically use this? Affects the pilot group size and rollout pace.</div>
+          </div>
+        </div>
+        <div class="qitem">
+          <div class="qnum">○ 02</div>
+          <div class="qbody">
+            <div class="qtopic">Current seat mix</div>
+            <div class="qtext">Are we currently on Standard seats, Premium seats, or a mix? I'll confirm this in the admin console either way, but useful for the budget conversation.</div>
+          </div>
+        </div>
+        <div class="qitem">
+          <div class="qnum">○ 03</div>
+          <div class="qbody">
+            <div class="qtopic">Sensitive content zones</div>
+            <div class="qtext">Are there SharePoint sites with particularly sensitive content — HR, financials, signed contracts, client legal — that we'd want to think about specifically before opening up?</div>
+          </div>
+        </div>
+        <div class="qitem">
+          <div class="qnum">○ 04</div>
+          <div class="qbody">
+            <div class="qtopic">Existing M365 governance</div>
+            <div class="qtext">Do we already use Microsoft Purview, sensitivity labels, or formal DLP at PGC? Or is our M365 set up at defaults? Different answers mean different rollout choices.</div>
+          </div>
+        </div>
+        <div class="qitem">
+          <div class="qnum">○ 05</div>
+          <div class="qbody">
+            <div class="qtopic">Division priorities</div>
+            <div class="qtext">Which division stands to benefit fastest? PGC corporate? Paradigm Solar? Buildforth? StokedLiving? That might shape who we pick for the pilot.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FRAMING QUOTE -->
+<div class="framing">
+  <div class="framing-inner">
+    <div class="label">If the safety question comes up in our meeting</div>
+    <div class="quote">The risk isn't <span class="em">Claude exceeding our permissions.</span> It's making sure <span class="em">our SharePoint permissions themselves</span> are clean — because Claude will inherit them exactly.</div>
+    <div class="attribution">— That's a SharePoint hygiene question more than a Claude question. Worth confirming with Dave before we expand past the pilot group.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="label">Prepared for</div>
+      <p>Our chat today on connecting Claude to SharePoint and Microsoft 365. Everything in here is meant to make that conversation easier and decision-ready.</p>
+    </div>
+    <div>
+      <div class="label">Follow-up</div>
+      <p>I'll keep the Monday conversation with Dave separate — those questions are listed in section 10. Anything we agree on today, I'll fold into the questions for him.</p>
+    </div>
+    <div>
+      <div class="label">Status</div>
+      <p><strong>Ready to move</strong> on a pilot the moment we agree the direction. Two switches, one on each side, then we're rolling.</p>
+    </div>
+  </div>
+  <div class="footer-end">
+    <div>Paradigm Group of Companies · IT &amp; AI · Internal</div>
+    <div class="red">Future Ready Homes. Built Today.</div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+  // Progress bar
+  const progress = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = ((scrolled / total) * 100) + '%';
+  });
+
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.chapter, .tldr, .pullquote, .framing');
+  revealEls.forEach(el => el.classList.add('reveal'));
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -80px 0px' });
+  revealEls.forEach(el => obs.observe(el));
+
+  // Active nav dot
+  const navLinks = document.querySelectorAll('.nav-dots a');
+  const sections = Array.from(navLinks).map(a => document.querySelector(a.getAttribute('href')));
+  function updateActive() {
+    const offset = window.scrollY + 200;
+    let curr = sections[0];
+    for (const s of sections) {
+      if (s && s.offsetTop <= offset) curr = s;
+    }
+    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + curr.id));
+  }
+  window.addEventListener('scroll', updateActive);
+  updateActive();
+</script>
+
+</body>
+</html>

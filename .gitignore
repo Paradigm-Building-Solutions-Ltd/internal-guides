@@ -1,0 +1,20 @@
+# macOS junk
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Editor junk
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS junk
+Thumbs.db
+desktop.ini
+
+# Local-only files (drafts you're not ready to publish)
+*.draft.html
+drafts/
