@@ -162,15 +162,14 @@
   }
 
   .hero h1 {
-    font-size: clamp(56px, 8.5vw, 132px);
+    font-size: clamp(48px, 7.5vw, 120px);
     font-weight: 800;
-    line-height: 0.92;
+    line-height: 0.95;
     letter-spacing: -0.025em;
     margin-bottom: 36px;
-    max-width: 14ch;
+    white-space: nowrap;
   }
   .hero h1 .alt { color: var(--red); font-style: italic; font-weight: 900; }
-  .hero h1 .line { display: block; }
 
   .hero-lede {
     font-size: 22px;
@@ -640,6 +639,7 @@
     .topbar-inner { padding: 12px 24px; }
     .topbar-meta { display: none; }
     .hero { padding: 140px 0 60px; }
+    .hero h1 { white-space: normal; }
     .hero-meta { grid-template-columns: 1fr; gap: 16px; }
     .guide { grid-template-columns: 64px 1fr; gap: 16px; padding: 32px 0; }
     .guide-num { font-size: 36px; }
@@ -655,7 +655,6 @@
 <div class="topbar">
   <div class="topbar-inner">
     <div class="topbar-brand">
-      <span class="topbar-mark"></span>
       <span>Paradigm Group of Companies</span>
     </div>
     <div class="topbar-meta">Internal Knowledge Base · Staff Use Only</div>
@@ -679,10 +678,7 @@
   </div>
   <div class="company-stripe"></div>
 
-  <h1>
-    <span class="line">Internal</span>
-    <span class="line"><span class="alt">Guides.</span></span>
-  </h1>
+  <h1>Internal <span class="alt">Guides.</span></h1>
 
   <p class="hero-lede">
     A living reference library for everyone at <strong>PGC, PBS, Paradigm Solar, BuildForth, and StokedLiving</strong>. Search any guide below, filter by audience or topic, and bookmark this page — it's updated as we learn.
