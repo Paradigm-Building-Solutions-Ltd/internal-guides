@@ -27,15 +27,9 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
-    font-family: 'Catamaran', sans-serif;
-    background: var(--paper);
-    color: var(--ink);
-    font-weight: 400;
-    line-height: 1.6;
-    font-size: 17px;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-    position: relative;
+    font-family: 'Catamaran', sans-serif; background: var(--paper); color: var(--ink);
+    font-weight: 400; line-height: 1.6; font-size: 17px; -webkit-font-smoothing: antialiased;
+    overflow-x: hidden; position: relative;
   }
   body::before {
     content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.6;
@@ -53,16 +47,8 @@
   }
   .container { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: 0 56px; }
 
-  .topbar {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(242, 238, 229, 0.92); backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(22,21,19,0.08);
-  }
-  .topbar-inner {
-    max-width: 1180px; margin: 0 auto; padding: 14px 56px;
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
-  }
+  .topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(242, 238, 229, 0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(22,21,19,0.08); }
+  .topbar-inner { max-width: 1180px; margin: 0 auto; padding: 14px 56px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; }
   .topbar-brand { display: flex; align-items: center; gap: 14px; }
   .topbar-mark { width: 22px; height: 22px; background: var(--red); display: inline-block; position: relative; }
   .topbar-mark::after { content: ''; position: absolute; top: 4px; left: 4px; width: 14px; height: 14px; background: var(--paper); }
@@ -70,23 +56,13 @@
   .progress { position: fixed; top: 49px; left: 0; height: 2px; background: var(--red); z-index: 99; width: 0; transition: width 0.1s linear; }
 
   .hero { padding: 170px 0 70px; }
-  .eyebrow {
-    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700;
-    color: var(--ink-soft); margin-bottom: 36px;
-  }
+  .eyebrow { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: var(--ink-soft); margin-bottom: 36px; }
   .eyebrow::before { content: ''; width: 48px; height: 2px; background: var(--red); }
   .eyebrow .sep { color: var(--ink-faint); font-weight: 400; }
   .eyebrow .lead { color: var(--red); font-weight: 800; }
-  .hero h1 {
-    font-size: clamp(44px, 6.5vw, 92px); font-weight: 800; line-height: 0.95;
-    letter-spacing: -0.025em; margin-bottom: 36px; max-width: 17ch;
-  }
+  .hero h1 { font-size: clamp(44px, 6.5vw, 92px); font-weight: 800; line-height: 0.95; letter-spacing: -0.025em; margin-bottom: 36px; max-width: 17ch; }
   .hero h1 .accent { color: var(--red); font-style: italic; font-weight: 900; }
-  .hero-meta {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
-    margin-top: 56px; padding-top: 28px; border-top: 1px solid rgba(22,21,19,0.15);
-  }
+  .hero-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; margin-top: 56px; padding-top: 28px; border-top: 1px solid rgba(22,21,19,0.15); }
   .meta-block .label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; color: var(--ink-faint); margin-bottom: 8px; display: block; }
   .meta-block .value { font-size: 15px; font-weight: 700; color: var(--ink); }
   .meta-block .value.red { color: var(--red); }
@@ -95,7 +71,7 @@
   .tldr { margin: 64px 0 0; padding: 56px 64px; background: var(--ink); color: var(--paper); position: relative; }
   .tldr::before { content: 'BOTTOM LINE'; position: absolute; top: 24px; right: 32px; font-size: 12px; letter-spacing: 0.3em; font-weight: 800; color: var(--red); }
   .tldr-label { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); font-weight: 700; margin-bottom: 22px; }
-  .tldr p { font-size: 20px; line-height: 1.55; font-weight: 400; max-width: 78ch; color: rgba(242,238,229,0.92); }
+  .tldr p { font-size: 20px; line-height: 1.55; font-weight: 400; max-width: 80ch; color: rgba(242,238,229,0.92); }
   .tldr p + p { margin-top: 18px; }
   .tldr strong { color: var(--paper); font-weight: 700; border-bottom: 2px solid var(--red); padding-bottom: 1px; }
 
@@ -107,11 +83,12 @@
   .chapter-title { font-size: clamp(28px, 3.4vw, 46px); font-weight: 800; line-height: 1.02; letter-spacing: -0.02em; max-width: 22ch; }
   .chapter-title .alt { font-style: italic; color: var(--red); font-weight: 700; }
 
-  .body { max-width: 760px; }
+  .body { max-width: 820px; }
   .body p { font-size: 18px; line-height: 1.68; margin-bottom: 22px; }
   .body p.lead { font-size: 22px; line-height: 1.5; font-weight: 500; margin-bottom: 32px; }
   .body strong { font-weight: 700; }
-  .body h3 { font-size: 24px; font-weight: 800; margin: 36px 0 14px; letter-spacing: -0.01em; }
+  .body h3 { font-size: 24px; font-weight: 800; margin: 38px 0 14px; letter-spacing: -0.01em; }
+  .body h4 { font-size: 19px; font-weight: 800; margin: 28px 0 10px; }
   .body ul { list-style: none; margin: 16px 0 24px; }
   .body ul li { padding: 7px 0 7px 28px; position: relative; font-size: 17px; line-height: 1.55; }
   .body ul li::before { content: ''; position: absolute; left: 0; top: 15px; width: 12px; height: 2px; background: var(--red); }
@@ -119,6 +96,8 @@
   .body ul li.yes { padding-left: 30px; } .body ul li.yes::after { content: '\2713'; position: absolute; left: 0; top: 6px; color: var(--green); font-weight: 800; }
   .body ul li.no { padding-left: 30px; } .body ul li.no::after { content: '\2715'; position: absolute; left: 0; top: 6px; color: var(--red); font-weight: 900; }
   .body ul li.warn { padding-left: 30px; } .body ul li.warn::after { content: '!'; position: absolute; left: 3px; top: 6px; color: var(--gold); font-weight: 900; }
+  .body ol { margin: 16px 0 24px 22px; }
+  .body ol li { padding: 6px 0 6px 6px; font-size: 17px; line-height: 1.55; }
 
   .callout { margin: 32px 0; padding: 24px 28px; border-left: 4px solid var(--red); background: var(--red-tint); }
   .callout.green { border-left-color: var(--green); background: var(--green-tint); }
@@ -129,25 +108,24 @@
   .callout p { font-size: 16px; line-height: 1.6; margin-bottom: 0; }
   .callout p + p { margin-top: 12px; }
 
-  /* Risk table */
-  .risk-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 15px; }
-  .risk-table th { text-align: left; padding: 14px 14px; background: var(--ink); color: var(--paper); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; }
-  .risk-table td { padding: 16px 14px; border-bottom: 1px solid rgba(22,21,19,0.15); vertical-align: top; line-height: 1.5; }
-  .risk-table tr:nth-child(even) td { background: rgba(255,255,255,0.4); }
-  .rating { display: inline-block; padding: 3px 12px; border-radius: 100px; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+  .qa { margin: 26px 0; padding-bottom: 22px; border-bottom: 1px solid rgba(22,21,19,0.12); }
+  .qa .q { font-size: 19px; font-weight: 800; color: var(--ink); margin-bottom: 8px; }
+  .qa .q::before { content: 'Q. '; color: var(--red); }
+  .qa .a { font-size: 17px; line-height: 1.62; color: var(--ink-soft); }
+  .qa .a strong { color: var(--ink); }
+
+  table.tbl { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 15px; }
+  table.tbl th { text-align: left; padding: 13px 12px; background: var(--ink); color: var(--paper); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; }
+  table.tbl td { padding: 14px 12px; border-bottom: 1px solid rgba(22,21,19,0.15); vertical-align: top; line-height: 1.45; }
+  table.tbl tr:nth-child(even) td { background: rgba(255,255,255,0.4); }
+  .rating { display: inline-block; padding: 3px 11px; border-radius: 100px; font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
   .rating.low { background: var(--green-tint); color: var(--green); }
   .rating.med { background: var(--gold-tint); color: var(--red-deep); }
   .rating.high { background: var(--red-tint); color: var(--red); }
-
-  /* Two-card compare */
-  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 28px 0; }
-  .opt { padding: 26px 28px; background: var(--paper-deep); border-top: 5px solid var(--ink); }
-  .opt.recommend { border-top-color: var(--green); }
-  .opt .otag { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 800; color: var(--ink-faint); margin-bottom: 8px; }
-  .opt.recommend .otag { color: var(--green); }
-  .opt h4 { font-size: 19px; font-weight: 800; margin-bottom: 10px; }
-  .opt p { font-size: 15px; line-height: 1.55; margin-bottom: 0; }
-  .opt .price { font-size: 13px; font-weight: 700; color: var(--red-deep); margin-top: 12px; }
+  .rating.free { background: var(--green-tint); color: var(--green); }
+  .rating.paid { background: var(--gold-tint); color: var(--red-deep); }
+  .rating.hard { background: var(--ink); color: var(--paper); }
+  .rating.soft { background: var(--paper-deep); color: var(--ink-soft); }
 
   .sources { margin-top: 40px; padding: 28px 32px; background: var(--paper-deep); }
   .sources .stitle { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 800; color: var(--ink-soft); margin-bottom: 14px; }
@@ -158,7 +136,7 @@
   .framing { margin: 96px -56px 0; padding: 88px 56px; background: var(--ink); color: var(--paper); }
   .framing-inner { max-width: 1180px; margin: 0 auto; padding: 0 56px; }
   .framing .label { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 800; color: var(--red); margin-bottom: 28px; }
-  .framing .quote { font-size: clamp(26px, 3vw, 40px); font-weight: 500; line-height: 1.3; max-width: 32ch; letter-spacing: -0.015em; }
+  .framing .quote { font-size: clamp(26px, 3vw, 40px); font-weight: 500; line-height: 1.3; max-width: 34ch; letter-spacing: -0.015em; }
   .framing .quote .em { color: var(--red); font-style: italic; font-weight: 700; }
 
   footer { padding: 64px 0 40px; border-top: 4px double rgba(22,21,19,0.2); margin-top: 0; }
@@ -173,11 +151,10 @@
     .topbar-inner { padding: 12px 32px; }
     .hero-meta { grid-template-columns: 1fr 1fr; }
     .chapter-header { grid-template-columns: 1fr; gap: 14px; }
-    .twocol { grid-template-columns: 1fr; }
     .framing { margin: 64px -32px 0; padding: 56px 32px; }
     .framing-inner { padding: 0; }
-    .risk-table { font-size: 13px; }
-    .risk-table th, .risk-table td { padding: 10px 8px; }
+    table.tbl { font-size: 13px; }
+    table.tbl th, table.tbl td { padding: 9px 7px; }
   }
   @media (max-width: 600px) {
     .container { padding: 0 20px; }
@@ -212,15 +189,15 @@
   <div class="hero-meta">
     <div class="meta-block"><span class="label">Question</span><span class="value">Can we connect Claude to our Microsoft 365 safely</span></div>
     <div class="meta-block"><span class="label">Overall risk</span><span class="value green">Low to moderate, manageable</span></div>
-    <div class="meta-block"><span class="label">Recommendation</span><span class="value red">Yes, with a small pilot and controls</span></div>
-    <div class="meta-block"><span class="label">Facts verified against</span><span class="value">Official Anthropic and Microsoft documentation</span></div>
+    <div class="meta-block"><span class="label">Recommendation</span><span class="value red">Yes, with a pilot and free controls</span></div>
+    <div class="meta-block"><span class="label">Facts verified against</span><span class="value">Official Anthropic, Microsoft, and Privacy Commissioner of Canada sources</span></div>
   </div>
 
   <div class="tldr">
     <div class="tldr-label">If you only read this</div>
-    <p>Anthropic, the company behind Claude, offers an official connector that lets Claude search and read our Microsoft 365 content. It is <strong>read-only</strong>, which means Claude can find and summarize information but can never change, send, or delete anything. It only ever sees what the signed-in person can already see, and it only reaches into Microsoft when someone asks a question that needs it.</p>
-    <p>Under our paid plan, Anthropic <strong>does not use our data to train its models</strong>, and it does not keep copies of our files. The one genuine consideration is that, like almost every cloud service, the data is processed and stored on servers in the <strong>United States</strong>, not Canada.</p>
-    <p>For our most sensitive material, such as financial records and proprietary manufacturing methods, there are concrete controls we can put in place so Claude can never reach them, even if a staff member asks. My recommendation is to <strong>turn this on for a small pilot group first</strong>, with those controls in place, and expand once we are comfortable.</p>
+    <p>Anthropic, the company behind Claude, offers an official connector that lets Claude search and read our Microsoft 365 content. It is <strong>read-only</strong>, so Claude can find and summarize information but can never change, send, or delete anything. It only ever sees what the signed-in person can already see, and only when that person asks a question that needs it.</p>
+    <p>On our paid plan, Anthropic <strong>does not use our data to train its models</strong> and does not keep copies of our files. The one genuine consideration is that, like most cloud tools we already use, the data is processed and stored on servers in the <strong>United States</strong>. Using a United States provider is <strong>legal for a Canadian company</strong> as long as we have the right contract in place and are transparent about it, which we can be.</p>
+    <p>For our most sensitive material, finance, human resources, and proprietary manufacturing methods, we can wall it off from Claude entirely. There are <strong>free ways to do this</strong>, and one very cheap paid way that costs about $488 per year for the whole company. My recommendation is to turn this on for a small pilot, with the walls in place first, and expand once we are comfortable.</p>
   </div>
 </section>
 
@@ -234,8 +211,8 @@
     </div>
   </div>
   <div class="body">
-    <p class="lead">We are turning on the official Microsoft 365 connector built by Anthropic. It is a finished, supported product, not an experiment, and it is included in the Claude plan we already pay for.</p>
-    <p>Once it is on, a staff member who links their own Microsoft account can ask Claude things like "find the Q4 planning document" or "summarize the email thread with the lumber supplier." Claude finds the right file or email, reads it, and answers, with links back to the source. The person does not have to download, upload, or paste anything.</p>
+    <p class="lead">We are turning on the official Microsoft 365 connector built by Anthropic. It is a finished, supported product, and it is included in the Claude plan we already pay for, at no extra cost.</p>
+    <p>Once it is on, a staff member who links their own Microsoft account can ask Claude things like "find the Q4 planning document" or "summarize the email thread with the lumber supplier." Claude finds the file or email, reads it, and answers, with links back to the source. The person does not have to download, upload, or paste anything.</p>
     <p>The most important thing to understand is what it <strong>cannot</strong> do. The connector is read-only:</p>
     <ul>
       <li class="no">It cannot send an email or reply to one</li>
@@ -244,7 +221,7 @@
       <li class="no">It cannot post in Teams or change any permission or setting</li>
       <li class="no">It cannot see anything the signed-in person could not already open themselves</li>
     </ul>
-    <p>In other words, the connector does not give Claude any access that our staff do not already have. It lets Claude look, on a person's behalf, at things that person could already look at.</p>
+    <p>In other words, the connector gives Claude no access that our staff do not already have. It lets Claude look, on a person's behalf, at what that person could already look at.</p>
   </div>
 </section>
 
@@ -253,7 +230,7 @@
   <div class="chapter-header">
     <div class="chapter-num">02</div>
     <div class="chapter-title-wrap">
-      <span class="label">Where our data goes, and who can see it</span>
+      <span class="label">Where our data goes, and what is actually stored</span>
       <h2 class="chapter-title">The honest answer on data, <span class="alt">storage, and training.</span></h2>
     </div>
   </div>
@@ -261,20 +238,27 @@
     <p class="lead">This is the section that matters most for a risk decision, so I have kept it plain and complete. Every point here is verified against Anthropic's official documentation.</p>
 
     <h3>Is our data used to train Claude?</h3>
-    <p>No. On our paid commercial plan, Anthropic does not use our conversations or our Microsoft 365 content to train its models. This is part of their commercial terms and is the default, not a setting we have to switch on. The recent change that allows training on personal data applies only to individual consumer accounts, not to business plans like ours.</p>
+    <p>No. On our paid commercial plan, Anthropic does not use our conversations or our Microsoft 365 content to train its models. This is part of their commercial terms and is the default, not a setting we switch on. The recent change that allows training on personal data applies only to individual consumer accounts, never to business plans like ours.</p>
 
-    <h3>Does Anthropic keep copies of our files?</h3>
-    <p>The connector does not store or cache the content of our files. Each request pulls only what is needed to answer the question and is cleaned up after the answer is given. The one nuance worth stating clearly: if the answer becomes part of a saved chat, that chat is kept in the user's history until they delete it, and is then removed from Anthropic's systems within 30 days. So the file itself is not copied, but a saved conversation that quoted from it lives in that chat until deleted.</p>
+    <h3>What actually travels to Claude, and is the file stored there?</h3>
+    <p>This is worth getting exactly right, because it is easy to misunderstand. When someone asks a question, Claude does not receive a pre-made summary from Microsoft. The <strong>actual relevant content of the file or email is sent to Claude's systems so the model can read it and answer</strong>. That is how any AI assistant works. The important part is what happens next: that content is used to produce the answer and is then <strong>cleaned up. The connector does not cache or store file content.</strong></p>
+    <p>So the accurate picture is:</p>
+    <ul>
+      <li class="yes">The real content is transmitted to Claude's systems to be read, in the moment, to answer the question</li>
+      <li class="yes">The file itself is never copied into permanent storage at Anthropic</li>
+      <li class="warn">If the answer is saved as part of a chat, that chat may quote some of the content, and it lives in the user's chat history until they delete it, then is removed from Anthropic's systems within 30 days</li>
+    </ul>
+    <p>The practical takeaway: the only Paradigm content that persists at Anthropic is whatever sits inside saved chats. There is no growing copy of our SharePoint or our mailboxes on Claude's servers. This matters a lot for the breach question in chapter 7.</p>
 
     <h3>Where is the data processed and stored?</h3>
-    <p>On servers in the <strong>United States</strong>. Anthropic may route traffic through other regions, but storage for our type of plan is in the US. A Canadian-hosted option exists only for a different, developer-style deployment, not for the product this connector runs on, and even a Canadian location would not change the fact that Anthropic is a US company subject to US law. This is the same situation as most cloud tools we already use, but it is the one point I want leadership to be aware of rather than gloss over.</p>
+    <p>On servers in the <strong>United States</strong>. Anthropic may route traffic through other regions, but storage for our type of plan is in the US. A Canadian-hosted option exists only for a different, developer-style deployment, not for the product this connector runs on, and even a Canadian location would not remove the fact that Anthropic is a United States company subject to United States law. This is the same situation as most cloud tools we already use, and chapter 6 covers whether it is legal for us (it is, with conditions).</p>
 
     <h3>Can Anthropic or Claude "see" our information?</h3>
-    <p>To answer a question, Claude's systems do read the relevant text in order to process it. That is true of every AI assistant. It is protected by strong encryption in transit and storage, by Anthropic's security certifications, by the no-training guarantee, and by the 30-day deletion of saved chats. It is not, however, a system where Anthropic can never technically see the content. I would rather state that plainly than overstate the protection.</p>
+    <p>To answer a question, Claude's systems do read the relevant text in order to process it. That is true of every AI assistant, and it means this is not a system where Anthropic can never technically see the content. What protects it: strong encryption in transit and storage, Anthropic's security certifications, the no-training guarantee, restricted internal access, and the 30-day deletion of saved chats. I would rather state that plainly than overstate the protection.</p>
 
     <div class="callout green">
       <div class="ctitle">In short</div>
-      <p>Not used for training. Files not copied. Encrypted in transit and at rest. Stored in the US. Deleted from saved chats within 30 days of deletion. Strong, audited security controls, but not a zero-knowledge system.</p>
+      <p>Not used for training. Files not copied or kept. The actual content is read in the moment to answer, then cleaned up. Encrypted in transit (TLS 1.2 or higher) and at rest (AES-256). Stored in the United States. Only saved chats persist, and they are removed within 30 days of deletion. Strong, audited controls, but not a zero-knowledge system.</p>
     </div>
   </div>
 </section>
@@ -293,7 +277,7 @@
       <li class="yes"><strong>It inherits permissions, it does not expand them.</strong> Claude acts on behalf of the signed-in person and can only reach what that person can already reach. If a folder is locked to someone in Microsoft, it stays locked to Claude for that person.</li>
       <li class="yes"><strong>Read-only.</strong> Nothing in Microsoft can be changed, sent, or deleted through the connector. The worst case is that Claude reads something a person could already have read.</li>
       <li class="yes"><strong>On-demand only.</strong> The connector does not sit in the background scanning our SharePoint. It only reaches in when a person asks a question that needs it.</li>
-      <li class="yes"><strong>Revocable at three independent levels.</strong> Any user can disconnect their own account; we can switch the connector off for the whole company in Claude; and our Microsoft administrator can withdraw consent on the Microsoft side. Any one of these cuts access immediately.</li>
+      <li class="yes"><strong>Revocable at three independent levels.</strong> Any user can disconnect their own account; we can switch the connector off for the whole company in Claude; and our Microsoft administrator can withdraw consent on the Microsoft side. Any one cuts access immediately.</li>
       <li class="yes"><strong>Fully auditable.</strong> Because everything runs through Microsoft with each person's identity, our administrator can see what was queried, by whom, and when, in our existing Microsoft logs.</li>
     </ul>
   </div>
@@ -309,52 +293,46 @@
     </div>
   </div>
   <div class="body" style="max-width: none;">
-    <table class="risk-table">
+    <table class="tbl">
       <thead>
         <tr><th style="width:26%">Risk</th><th style="width:13%">Likelihood</th><th style="width:13%">Impact</th><th style="width:48%">How we reduce it</th></tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>Company data is processed on US servers</strong></td>
+          <td><strong>Company data is processed on United States servers</strong></td>
           <td><span class="rating med">Certain</span></td>
           <td><span class="rating low">Low</span></td>
-          <td>Encrypted in transit and storage; not used for training; deleted from saved chats within 30 days. Same posture as our existing cloud tools. We keep the most sensitive content out of reach (see chapter 5).</td>
+          <td>Encrypted in transit and storage; not used for training; only saved chats persist, deleted within 30 days. Legal with the right contract and transparency (chapter 6).</td>
         </tr>
         <tr>
-          <td><strong>Claude surfaces a financial or HR file to a staff member through search</strong></td>
+          <td><strong>Claude surfaces a finance or HR file to a staff member through search</strong></td>
           <td><span class="rating med">Possible</span></td>
           <td><span class="rating med">Moderate</span></td>
-          <td>The person could already open that file directly, so this is really an existing permissions question. We block those sites from Claude using the controls in chapter 5, and tighten who has access.</td>
+          <td>The person could already open that file directly, so this is really an existing-permissions question. We wall those sites off from Claude using the controls in chapter 5, free.</td>
         </tr>
         <tr>
           <td><strong>Proprietary manufacturing methods are read by Claude</strong></td>
           <td><span class="rating low">Unlikely</span></td>
           <td><span class="rating high">High if it happened</span></td>
-          <td>Keep this content on sites that are blocked from Claude's reach and restricted to a small group. Combined with the no-training guarantee, the exposure is contained. This is the crown-jewel case and we treat it as such.</td>
+          <td>Keep this content on sites walled off from Claude and restricted to a small group. With the no-training guarantee and no file storage, exposure is contained. This is the crown-jewel case and we treat it as such.</td>
         </tr>
         <tr>
           <td><strong>Meeting recordings and transcripts are readable</strong></td>
           <td><span class="rating med">Possible</span></td>
           <td><span class="rating med">Moderate</span></td>
-          <td>This is the single most sensitive permission in the set. We can strip just the meeting-recording permissions during setup and lose nothing else.</td>
+          <td>The single most sensitive permission in the set. We can strip just the meeting-recording permissions during setup and lose nothing else.</td>
         </tr>
         <tr>
-          <td><strong>Shared mailboxes (such as info@ or support@) are readable</strong></td>
-          <td><span class="rating low">Possible</span></td>
-          <td><span class="rating low">Low</span></td>
-          <td>Only readable by people who already have access to those mailboxes. We review who that is during the pilot.</td>
-        </tr>
-        <tr>
-          <td><strong>A US legal request reaches data stored at Anthropic</strong></td>
+          <td><strong>A United States legal request reaches data stored at Anthropic</strong></td>
           <td><span class="rating low">Unlikely</span></td>
           <td><span class="rating med">Moderate</span></td>
-          <td>Real but low-probability, and true of most US cloud tools we use. Keeping crown-jewel content blocked from Claude is the main mitigation.</td>
+          <td>Real but low-probability, and true of most United States cloud tools. The main mitigation is that almost nothing persists at Anthropic, so there is little to reach. Keep crown jewels out entirely.</td>
         </tr>
         <tr>
-          <td><strong>An Anthropic employee improperly views data</strong></td>
+          <td><strong>Anthropic suffers a breach and Paradigm data leaks</strong></td>
           <td><span class="rating low">Unlikely</span></td>
           <td><span class="rating med">Moderate</span></td>
-          <td>Governed by Anthropic's security certifications (SOC 2 Type 2, ISO 27001), internal access controls, and the no-training commitment.</td>
+          <td>Only saved chats and encrypted tokens could be exposed, not a copy of our files. Minimize by deleting chats, keeping crown jewels out, and our breach duties are covered in chapter 7.</td>
         </tr>
       </tbody>
     </table>
@@ -370,39 +348,194 @@
   <div class="chapter-header">
     <div class="chapter-num">05</div>
     <div class="chapter-title-wrap">
-      <span class="label">Protecting our crown jewels</span>
-      <h2 class="chapter-title">How we wall off finance, HR, <span class="alt">and manufacturing secrets.</span></h2>
+      <span class="label">Walling off our crown jewels</span>
+      <h2 class="chapter-title">Every way to block Claude from sensitive sites, <span class="alt">free and paid.</span></h2>
     </div>
   </div>
   <div class="body">
-    <p class="lead">This is the part I researched most carefully, because it is where a wrong assumption could cost us. Here is what actually works, verified against both Anthropic and Microsoft documentation.</p>
+    <p class="lead">This is the chapter I researched most carefully, because it is where a wrong assumption could cost us money or leave a gap. Here is the full toolkit, verified against both Anthropic and Microsoft documentation, sorted from free to paid.</p>
 
-    <h3>What does not work</h3>
-    <p>A common assumption is that we can give Claude access to some SharePoint sites and not others by adjusting Microsoft permissions site by site. Anthropic's own documentation states clearly that this site-by-site approach is <strong>not supported</strong> for this connector, because the search it uses looks across the whole tenant. So we should not rely on it.</p>
+    <h3>First, what does not work</h3>
+    <p>A common assumption is that we can give Claude access to some SharePoint sites and not others by adjusting Microsoft permissions site by site for the connector. Anthropic's own documentation states clearly that this site-by-site approach is <strong>not supported</strong> for this connector, because the search it uses looks across the whole tenant. We should not rely on it.</p>
 
-    <h3>The hard block that does work</h3>
-    <p>Microsoft has a feature called <strong>Restricted Content Discovery</strong>. When we switch it on for a specific site, that site's content is removed from the company-wide search that Claude depends on. The people who already have access can still open the files directly, but Claude can no longer find them. Microsoft's documentation confirms this is designed for exactly this purpose, and independent testing confirms it stops Claude.</p>
+    <h3>The full menu of controls</h3>
+    <table class="tbl">
+      <thead>
+        <tr><th style="width:28%">Control</th><th style="width:11%">Cost</th><th style="width:13%">Block type</th><th style="width:48%">What it does in one line</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Permission hygiene</strong></td><td><span class="rating free">Free</span></td><td><span class="rating hard">Hard</span></td><td>Do not give Claude users access to the site. Claude inherits permissions, so if they cannot open it, neither can Claude. The only true security boundary on this list.</td></tr>
+        <tr><td><strong>"Do not show in search results" per site</strong></td><td><span class="rating free">Free</span></td><td><span class="rating hard">Hard for Claude</span></td><td>A built-in per-site toggle that removes the site from all search. Claude relies on search, so it can no longer find the site.</td></tr>
+        <tr><td><strong>Restricted SharePoint Search</strong></td><td><span class="rating free">Free</span></td><td><span class="rating hard">Hard for Claude</span></td><td>An allow-list of up to 100 approved sites. Everything not on the list is hidden from search and agents like Claude.</td></tr>
+        <tr><td><strong>Strip permission scopes at setup</strong></td><td><span class="rating free">Free</span></td><td><span class="rating hard">Hard</span></td><td>Remove whole categories during approval, for example meeting recordings, or all SharePoint. Blunt but absolute.</td></tr>
+        <tr><td><strong>Organization Instructions for Claude</strong></td><td><span class="rating free">Free</span></td><td><span class="rating soft">Soft</span></td><td>A standing rule injected into every Claude conversation telling it to never touch named sites. High reliability, not a guaranteed boundary.</td></tr>
+        <tr><td><strong>Restricted Content Discovery</strong></td><td><span class="rating paid">~$488/yr</span></td><td><span class="rating hard">Hard for Claude</span></td><td>The proper deny-list. Hide chosen sites from search, Copilot, and agents. Unlocked tenant-wide by a single Copilot license.</td></tr>
+        <tr><td><strong>Sensitivity labels with encryption</strong></td><td><span class="rating paid">License upgrade</span></td><td><span class="rating hard">Hard, content-level</span></td><td>Encrypt the file itself so Claude cannot read the content even if it finds it. Protection travels with the file anywhere.</td></tr>
+      </tbody>
+    </table>
 
-    <div class="callout gold">
-      <div class="ctitle">Important cost catch, and the smart way around it</div>
-      <p>Restricted Content Discovery requires at least one Microsoft Copilot license in our tenant, or a paid add-on. We just cancelled our three Copilot licenses to save about $1,465 per year, so this feature will switch off after June 2 unless we act.</p>
-      <p>The smart, lowest-cost path is to keep <strong>one</strong> Copilot license active (about $488 per year) rather than buy a separate add-on for many users. One license unlocks Restricted Content Discovery across the whole tenant. We would still save roughly $980 per year versus the three licenses we had, and gain a real hard block on sensitive sites. I will confirm the exact cheapest route before we commit.</p>
+    <h3>The free hard blocks, step by step</h3>
+
+    <h4>Free option A: turn off "Allow this site to appear in search results"</h4>
+    <p>Every SharePoint site has a built-in setting that removes it from search. Microsoft's own documentation confirms that turning it off "blocks the site content from showing up in both the organization-wide search and the site-specific search." Because Claude finds content through that search, this stops Claude from reaching it.</p>
+    <ol>
+      <li>In the site, go to Settings, then Site Settings, then Search and offline availability.</li>
+      <li>Set "Allow this site to appear in Search results" to No, and save. (This can also be done in bulk with a PowerShell script for several sites at once.)</li>
+    </ol>
+    <p><strong>Trade-off to know:</strong> it removes the site from search for everyone, not just Claude, so staff also cannot find it through search and must navigate to it directly. For crown-jewel sites that is usually acceptable. It is a discovery block, not a permissions change.</p>
+
+    <h4>Free option B: Restricted SharePoint Search (an allow-list)</h4>
+    <p>This is a free Microsoft feature built for exactly this moment, letting an administrator approve a list of up to 100 sites that are allowed to appear in company-wide search and in AI agents like Claude. Everything not on the list is hidden from Claude.</p>
+    <ol>
+      <li>Our administrator turns on Restricted SharePoint Search (done with a short PowerShell command).</li>
+      <li>They add only the safe, reviewed sites to the allowed list, and leave finance, HR, and manufacturing off it.</li>
+      <li>It takes effect within about an hour.</li>
+    </ol>
+    <p><strong>Trade-offs to know, stated honestly:</strong> Microsoft describes this as a temporary measure, not a long-term solution. It is capped at 100 sites. It is not a security boundary, and it is slightly leaky, if a user recently opened a site or it was shared with them directly, it can still surface for that user. For a company our size it is a strong free interim wall, but it is not airtight.</p>
+
+    <div class="callout green">
+      <div class="ctitle">My free recommendation</div>
+      <p>For Paradigm, combine two free controls and you get a strong result at zero cost: keep the crown-jewel sites out of search using option A or B (so Claude cannot find them), and tighten permissions so the people using Claude do not have access to those sites anyway (the only true boundary). Add the Organization Instruction soft block on top as a third layer. No license required.</p>
     </div>
 
-    <h3>The free layers we add on top</h3>
-    <ul>
-      <li class="yes"><strong>Permission hygiene.</strong> Because Claude inherits each person's access, the cleanest protection costs nothing: make sure the people who use Claude do not have access to the crown-jewel sites in the first place. If they cannot open it, neither can Claude.</li>
-      <li class="yes"><strong>A company instruction for Claude.</strong> We can give Claude a standing rule never to look at named sensitive sites, even if asked. This is a softer block that relies on Claude following the instruction, but it adds a useful extra layer and costs nothing.</li>
-      <li class="yes"><strong>Strip the riskiest permissions.</strong> During setup we can remove specific permissions, such as access to meeting recordings, without losing the rest of the connector.</li>
-    </ul>
-    <p>Used together, these give us a strong, layered defense around finance, HR, and our manufacturing know-how.</p>
+    <h3>The cheap paid hard block, and the licensing trick you asked about</h3>
+    <p>Microsoft's <strong>Restricted Content Discovery</strong> is the cleanest deny-list: pick specific sites and they vanish from search, Copilot, and agents like Claude, while the people with access can still open the files directly. It is the purpose-built tool.</p>
+    <div class="callout gold">
+      <div class="ctitle">Yes, one license unlocks it for everyone</div>
+      <p>You asked whether buying it for one user unlocks it for the whole company. It does. Microsoft confirms that assigning a single Microsoft 365 Copilot license to one user unlocks SharePoint Advanced Management, including Restricted Content Discovery, for the <strong>entire tenant</strong>, and it can then be applied to any site for all users. This is the same one-license-unlocks-everything pattern that exists for several Microsoft features.</p>
+      <p>So the cheapest route to the proper hard block is to keep <strong>one</strong> Copilot license active, about $488 per year. We just cancelled all three Copilot licenses to save $1,465 per year, so keeping one still saves us roughly $980 per year while giving us the full deny-list control. There is also a standalone SharePoint Advanced Management add-on at about $3 per user per month if we prefer not to keep a Copilot license; I will confirm which is genuinely cheapest for us before any spend.</p>
+    </div>
+
+    <h3>The strongest control of all, if we ever want it: encrypt the file</h3>
+    <p>If we apply a sensitivity label that encrypts a file, Claude cannot read the content even if it somehow finds the file, unless the user has a specific "extract" right that we can withhold. The protection travels with the file wherever it goes. This is the gold standard for true crown-jewel material such as proprietary manufacturing methods. The catch is that it needs a higher Microsoft license tier than our current one, so it would be a deliberate upgrade for a small number of users, not a free option. Worth keeping on the table for the manufacturing IP specifically.</p>
   </div>
 </section>
 
-<!-- CHAPTER 6 -->
+<!-- CHAPTER 5b: SOFT BLOCK -->
 <section class="chapter">
   <div class="chapter-header">
     <div class="chapter-num">06</div>
+    <div class="chapter-title-wrap">
+      <span class="label">The soft block, explained properly</span>
+      <h2 class="chapter-title">How we make Claude follow the rule <span class="alt">every single time.</span></h2>
+    </div>
+  </div>
+  <div class="body">
+    <p class="lead">You asked exactly how the soft block works, step by step, and how we guarantee Claude uses it whenever it touches SharePoint. Here is the precise answer.</p>
+
+    <h3>It is not a skill, it is an Organization Instruction</h3>
+    <p>A "skill" in Claude is a capability that is pulled in only when it is relevant, so it is not guaranteed to apply to every conversation. That is the wrong tool for a rule that must always be on. The right tool is a feature called <strong>Organization Instructions</strong>, available to administrators on our Team plan. Anthropic's documentation states that organization instructions are "custom instructions that Claude follows in every conversation across your organization" and are "included in every message sent by everyone in your organization."</p>
+    <p>That phrase, every message by everyone, is the key. We write the rule once, and Claude receives it on every single query from every staff member automatically. We do not rely on anyone remembering to invoke anything.</p>
+
+    <h3>How we would set it up</h3>
+    <ol>
+      <li>As a Claude organization owner, I open Organization settings and set the Organization Instructions.</li>
+      <li>The instruction names our sensitive sites and tells Claude never to read from them or use their content, even if a user asks, and to tell the user it is restricted instead.</li>
+      <li>The instruction has a 3,000 character limit, which is plenty for a list of sites and a clear rule. Organization instructions also take precedence over anything an individual user sets.</li>
+    </ol>
+
+    <div class="callout">
+      <div class="ctitle">Honest limit of the soft block</div>
+      <p>This is a high-reliability control because the rule is present in every message, but it is still guidance to the model, not a technical wall. A determined or clever prompt could in principle try to talk around it. That is why the soft block is a useful third layer, not a substitute for a free hard block on the truly sensitive sites. Use both together: the hard block stops Claude from finding the site at all, and the instruction tells Claude to refuse even if it ever did.</p>
+    </div>
+
+    <h3>The layered approach I recommend</h3>
+    <ul>
+      <li class="yes"><strong>Layer 1, permissions:</strong> the people using Claude do not have access to crown-jewel sites. True boundary, free.</li>
+      <li class="yes"><strong>Layer 2, search wall:</strong> crown-jewel sites are removed from search (free option A or B), so Claude cannot find them.</li>
+      <li class="yes"><strong>Layer 3, instruction:</strong> Organization Instruction tells Claude to refuse those sites by name. Free.</li>
+      <li class="yes"><strong>Optional Layer 4, deny-list:</strong> Restricted Content Discovery for about $488 per year if we want the purpose-built tool and tenant-wide auditing.</li>
+      <li class="yes"><strong>Optional Layer 5, encryption:</strong> sensitivity-label encryption on the manufacturing IP files for content that must never be readable. License upgrade.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- CHAPTER 7: LEGAL -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">07</div>
+    <div class="chapter-title-wrap">
+      <span class="label">The legal question</span>
+      <h2 class="chapter-title">Is it lawful for a Canadian company <span class="alt">to use a United States provider?</span></h2>
+    </div>
+  </div>
+  <div class="body">
+    <p class="lead">Short answer: yes, it is lawful, and it is something Canadian companies do every day with tools like Microsoft, Google, and others. There are conditions we must meet, and they are straightforward. The detail below reflects Canadian privacy law as published by the Office of the Privacy Commissioner of Canada.</p>
+
+    <div class="callout">
+      <div class="ctitle">Important</div>
+      <p>I am the IT and AI Coordinator, not a lawyer. This section is a careful plain-language summary to inform the decision. For anything we want to rely on formally, we should have it confirmed by legal counsel. The stakes warrant a quick review.</p>
+    </div>
+
+    <h3>What the law actually requires</h3>
+    <p>Under Canada's federal privacy law (PIPEDA), and British Columbia's provincial law (PIPA), a company is allowed to send personal information to a service provider in another country for processing. There is no rule that the data must stay in Canada. What the law does require is the following:</p>
+    <ul>
+      <li class="yes"><strong>Comparable protection by contract.</strong> We must ensure the provider protects the data to a level comparable to what it would get here, through a written agreement. Anthropic offers a data processing agreement for exactly this, and holds recognized security certifications.</li>
+      <li class="yes"><strong>Transparency.</strong> We must be open with our people that their information may be processed and stored outside Canada and could be subject to foreign laws. In practice this is a line in our privacy notice and our internal policy.</li>
+      <li class="yes"><strong>Accountability.</strong> We remain responsible for the data even while Anthropic processes it. We choose the provider carefully, keep the agreement, and apply sensible controls, which is what this whole analysis is.</li>
+    </ul>
+
+    <h3>The one thing we cannot contract away</h3>
+    <p>No contract can override the laws of another country. While our data sits on United States servers, it is, in principle, subject to United States legal processes such as government requests. This is true of every United States cloud tool we use today, not unique to Claude. The realistic mitigation is the same as everywhere else in this document: keep the genuinely sensitive material out of Claude entirely, so there is little of consequence on those servers in the first place.</p>
+
+    <h3>What we should do to be clean</h3>
+    <ul>
+      <li class="yes">Put Anthropic's data processing agreement in place as part of enabling the connector.</li>
+      <li class="yes">Add a short, clear line to our employee and customer privacy notices that we use reputable third-party processors that may operate outside Canada.</li>
+      <li class="yes">Keep the crown-jewel controls from chapter 5 in place so the most sensitive personal and proprietary information never reaches a foreign server.</li>
+      <li class="yes">Have legal counsel give the arrangement a brief review before a wide rollout.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- CHAPTER 8: BREACH -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">08</div>
+    <div class="chapter-title-wrap">
+      <span class="label">If something goes wrong</span>
+      <h2 class="chapter-title">If Claude or Anthropic is breached, <span class="alt">what happens to us?</span></h2>
+    </div>
+  </div>
+  <div class="body">
+    <p class="lead">These are the hard "what if" questions, answered directly.</p>
+
+    <div class="qa">
+      <div class="q">If Claude reads one of our employee files, and Anthropic is later hacked, can our data leak?</div>
+      <div class="a">Only what reached Anthropic and persisted there could be exposed, and that is a deliberately small surface. The connector <strong>does not store our files</strong>, so there is no copy of our HR folder or our mailboxes sitting on Claude's servers waiting to leak. The only Paradigm content that persists is what lives inside <strong>saved chat conversations</strong>, which may quote pieces of a file, plus the encrypted access tokens. So the honest answer is: a leak could expose the contents of saved chats that happened to discuss sensitive data, but not a wholesale copy of our SharePoint or email. We shrink this further by deleting chats that touch sensitive topics and by keeping crown jewels out of Claude in the first place.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">Who carries the legal burden, Paradigm or Anthropic?</div>
+      <div class="a">Both, but in different ways, and we cannot fully hand it off. Under Canadian privacy law, Paradigm <strong>remains accountable</strong> for our people's personal information even when a provider processes it. So if a breach at Anthropic exposed Paradigm data, we would be responsible for assessing the harm and, if it crossed the legal threshold of a real risk of significant harm, for reporting it to the Privacy Commissioner of Canada and notifying the affected people. At the same time, Anthropic, as our processor, is contractually responsible to us under its agreement, must notify us of a breach, and carries its own regulatory obligations. In plain terms: we cannot say "not our problem, it was Claude," but we can hold Anthropic to account under the contract and recover from them. This is exactly why the small data surface and the crown-jewel controls matter, they limit what we would ever be on the hook for.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">Could a competitor or outsider pull our data through this connector?</div>
+      <div class="a">Not without first logging in as one of our own staff. Access runs through Microsoft sign-in with our existing protections, including multi-factor authentication, and Claude only ever sees what that signed-in person can see. An outsider would need to defeat a staff member's Microsoft login, which is the same barrier that protects all our Microsoft data today.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">When an employee leaves, is their Claude history with company data a loose end?</div>
+      <div class="a">It can be, which is why we handle it in offboarding. Removing a leaver's Claude seat and clearing their access is part of the onboarding and offboarding process we are already building. It is a routine step, not a special problem.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">Does Claude reading a file create a permanent copy somewhere?</div>
+      <div class="a">No. The content is read in the moment to answer and then cleaned up. The only persistence is inside saved chats, which are deletable and are removed from Anthropic's systems within 30 days of deletion.</div>
+    </div>
+
+    <div class="qa">
+      <div class="q">What is the single most effective thing we can do to limit all of this?</div>
+      <div class="a"><strong>Data minimization.</strong> Keep finance, HR, and manufacturing secrets walled off from Claude using the free controls in chapter 5, and encourage staff to delete chats that touch sensitive material. If the sensitive data never reaches Claude, almost every risk in this document shrinks to near zero.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 9: OUTLOOK -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">09</div>
     <div class="chapter-title-wrap">
       <span class="label">Outlook, specifically</span>
       <h2 class="chapter-title">What to know about <span class="alt">email and the connector.</span></h2>
@@ -410,31 +543,34 @@
   </div>
   <div class="body">
     <ul>
-      <li class="yes"><strong>Read-only here too.</strong> Claude can read and summarize email but cannot send, reply, forward, or delete. This is actually stricter than the Google version of the connector, which can draft replies.</li>
+      <li class="yes"><strong>Read-only here too.</strong> Claude can read and summarize email but cannot send, reply, forward, or delete. This is stricter than the Google version of the connector, which can draft replies.</li>
       <li class="warn"><strong>Shared mailboxes are included.</strong> If a person has access to a shared mailbox such as info@ or accounts@, Claude can read those messages for them as well. We confirm who has shared-mailbox access during the pilot.</li>
       <li class="yes"><strong>Personal inboxes stay personal.</strong> Claude only reads the signed-in person's own mail and the shared mailboxes they already use. It cannot read a colleague's private inbox.</li>
       <li class="warn"><strong>Archived mail is included.</strong> The read permission covers archived messages, not just the current inbox. Worth knowing for anything sensitive sitting in old email.</li>
+      <li class="yes"><strong>The same controls apply.</strong> If a topic is too sensitive for email exposure, the answer is the same as for files: minimize what is there, and remember the no-training and no-storage guarantees still hold.</li>
     </ul>
   </div>
 </section>
 
-<!-- CHAPTER 7 -->
+<!-- CHAPTER 10: RECOMMENDATION -->
 <section class="chapter">
   <div class="chapter-header">
-    <div class="chapter-num">07</div>
+    <div class="chapter-num">10</div>
     <div class="chapter-title-wrap">
       <span class="label">My recommendation</span>
       <h2 class="chapter-title">Turn it on carefully, <span class="alt">in two phases.</span></h2>
     </div>
   </div>
   <div class="body">
-    <p class="lead">The risk is low to moderate and well understood, and the controls are real. I recommend we proceed, starting small.</p>
+    <p class="lead">The risk is low to moderate and well understood, the controls are real, and the strongest of them are free. I recommend we proceed, starting small.</p>
 
     <h3>Before we switch anything on</h3>
     <ul>
-      <li class="yes">Decide on the crown-jewel protection: keep one Copilot license to enable the hard block, or rely on permission hygiene and the company instruction for the pilot.</li>
-      <li class="yes">Identify the specific finance, HR, and manufacturing sites to wall off.</li>
+      <li class="yes">Identify the exact finance, HR, and manufacturing sites to wall off.</li>
+      <li class="yes">Apply the free controls to those sites: remove them from search and confirm the pilot users do not have access to them.</li>
+      <li class="yes">Set the Organization Instruction naming those sites.</li>
       <li class="yes">Decide whether to strip the meeting-recording permission from the start.</li>
+      <li class="yes">Put Anthropic's data processing agreement in place and add the privacy-notice line.</li>
     </ul>
 
     <h3>Phase one, a small pilot (about three weeks)</h3>
@@ -446,22 +582,22 @@
 
     <h3>Phase two, broader rollout (weeks four to eight)</h3>
     <ul>
-      <li class="yes">Write a short staff usage policy.</li>
-      <li class="yes">Run a 30-minute training session per division.</li>
-      <li class="yes">Expand access based on what we learned, with the sensitive-site blocks confirmed in place.</li>
+      <li class="yes">Write a short staff usage policy and run a 30-minute training per division.</li>
+      <li class="yes">Decide whether to add Restricted Content Discovery (about $488 per year) for purpose-built, audited deny-listing, or stay on the free controls.</li>
+      <li class="yes">Expand access with the sensitive-site walls confirmed in place, and have legal counsel give the arrangement a brief review.</li>
     </ul>
 
     <div class="callout green">
       <div class="ctitle">Cost to the company</div>
-      <p>The connector itself is included in our existing plan at no extra cost. The only optional spend is keeping one Copilot license (about $488 per year) to enable the hard block on sensitive sites, which still leaves us saving against what we paid before.</p>
+      <p>The connector is included in our existing plan at no extra cost, and the protections I recommend for the pilot are all free. The only optional spend is about $488 per year for Restricted Content Discovery if we later want the purpose-built deny-list, which still leaves us saving against what we paid for Copilot before.</p>
     </div>
   </div>
 </section>
 
-<!-- CHAPTER 8 -->
+<!-- CHAPTER 11: OPEN ITEMS -->
 <section class="chapter">
   <div class="chapter-header">
-    <div class="chapter-num">08</div>
+    <div class="chapter-num">11</div>
     <div class="chapter-title-wrap">
       <span class="label">Honest open items</span>
       <h2 class="chapter-title">What I still need to <span class="alt">confirm before go-live.</span></h2>
@@ -469,9 +605,10 @@
   </div>
   <div class="body">
     <ul>
-      <li class="warn">The exact cheapest licensing route to keep Restricted Content Discovery available after our Copilot cancellation. I will confirm with our IT partner and Microsoft before we commit any spend.</li>
-      <li class="warn">Whether any of our existing SharePoint sites are already hidden from company-wide search, which would mean they are already out of Claude's reach.</li>
-      <li class="warn">Final confirmation from our IT partner on the one-time Microsoft approval step and which permissions they are comfortable granting.</li>
+      <li class="warn">Whether to use the free search-removal controls or keep one Copilot license for Restricted Content Discovery, after confirming the genuinely cheapest route with our IT partner and Microsoft.</li>
+      <li class="warn">Whether any of our SharePoint sites are already hidden from company-wide search, which would mean they are already out of Claude's reach.</li>
+      <li class="warn">A brief legal review of the data processing agreement and privacy-notice wording.</li>
+      <li class="warn">Final confirmation from our IT partner on the one-time Microsoft approval and which permissions to grant versus strip.</li>
     </ul>
 
     <div class="sources">
@@ -480,9 +617,13 @@
         <li>Anthropic, Microsoft 365 connector security guide (read-only scope, delegated permissions, on-demand, no file caching, site-by-site permissioning not supported)</li>
         <li>Anthropic, Microsoft 365 connector setup guide (plans, admin consent, admin controls)</li>
         <li>Anthropic Privacy Center, "Is my data used for model training" (commercial data not used for training)</li>
-        <li>Anthropic Privacy Center, organization data retention and server location (US storage, 30-day deletion)</li>
+        <li>Anthropic Privacy Center, organization data retention and server location (United States storage, 30-day deletion of deleted chats)</li>
         <li>Anthropic, regional compliance and security (SOC 2 Type 2, ISO 27001, AES-256 at rest, TLS in transit)</li>
-        <li>Microsoft Learn, Restricted Content Discovery and SharePoint Advanced Management licensing (how the hard block works and what license it needs)</li>
+        <li>Anthropic, "Set organization instructions" (instructions applied to every conversation across the organization)</li>
+        <li>Microsoft Learn, Restricted Content Discovery and SharePoint Advanced Management licensing (deny-list, and one Copilot license unlocks it tenant-wide)</li>
+        <li>Microsoft Learn, Restricted SharePoint Search (free allow-list) and "Allow this site to appear in search results" (free per-site search removal)</li>
+        <li>Microsoft Learn, sensitivity labels and the extract usage right (content-level block for agents)</li>
+        <li>Office of the Privacy Commissioner of Canada, guidelines for processing personal data across borders and accountability principle (PIPEDA)</li>
       </ul>
     </div>
   </div>
@@ -493,7 +634,7 @@
 <div class="framing">
   <div class="framing-inner">
     <div class="label">The bottom line for our decision</div>
-    <div class="quote">The risk is not Claude exceeding our permissions. It is making sure <span class="em">our own permissions are clean</span>, and keeping our crown jewels out of reach. Both are in our control.</div>
+    <div class="quote">The risk is not Claude exceeding our permissions. It is keeping our crown jewels out of reach and our permissions clean. <span class="em">Both are free, and both are in our control.</span></div>
   </div>
 </div>
 
