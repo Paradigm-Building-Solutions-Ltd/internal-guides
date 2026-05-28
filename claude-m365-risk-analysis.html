@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="referrer" content="no-referrer">
+<title>Connecting Claude to Microsoft 365: Risk Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F2EEE5;
+    --paper-deep: #EAE4D6;
+    --ink: #161513;
+    --ink-soft: #4A453D;
+    --ink-faint: #8A8378;
+    --red: #C8202C;
+    --red-deep: #962027;
+    --red-tint: rgba(200, 32, 44, 0.08);
+    --gold: #B68A35;
+    --gold-tint: rgba(182, 138, 53, 0.12);
+    --green: #2F4F36;
+    --green-tint: rgba(47, 79, 54, 0.12);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Catamaran', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-weight: 400;
+    line-height: 1.6;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.6;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(0,0,0,0.012) 1px, transparent 1px),
+      radial-gradient(circle at 70% 70%, rgba(0,0,0,0.012) 1px, transparent 1px);
+    background-size: 4px 4px, 6px 6px;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(to right, rgba(22,21,19,0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(22,21,19,0.025) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+  .container { position: relative; z-index: 2; max-width: 1180px; margin: 0 auto; padding: 0 56px; }
+
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(242, 238, 229, 0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(22,21,19,0.08);
+  }
+  .topbar-inner {
+    max-width: 1180px; margin: 0 auto; padding: 14px 56px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 14px; }
+  .topbar-mark { width: 22px; height: 22px; background: var(--red); display: inline-block; position: relative; }
+  .topbar-mark::after { content: ''; position: absolute; top: 4px; left: 4px; width: 14px; height: 14px; background: var(--paper); }
+  .topbar-meta { color: var(--ink-faint); font-weight: 500; }
+  .progress { position: fixed; top: 49px; left: 0; height: 2px; background: var(--red); z-index: 99; width: 0; transition: width 0.1s linear; }
+
+  .hero { padding: 170px 0 70px; }
+  .eyebrow {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700;
+    color: var(--ink-soft); margin-bottom: 36px;
+  }
+  .eyebrow::before { content: ''; width: 48px; height: 2px; background: var(--red); }
+  .eyebrow .sep { color: var(--ink-faint); font-weight: 400; }
+  .eyebrow .lead { color: var(--red); font-weight: 800; }
+  .hero h1 {
+    font-size: clamp(44px, 6.5vw, 92px); font-weight: 800; line-height: 0.95;
+    letter-spacing: -0.025em; margin-bottom: 36px; max-width: 17ch;
+  }
+  .hero h1 .accent { color: var(--red); font-style: italic; font-weight: 900; }
+  .hero-meta {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+    margin-top: 56px; padding-top: 28px; border-top: 1px solid rgba(22,21,19,0.15);
+  }
+  .meta-block .label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; color: var(--ink-faint); margin-bottom: 8px; display: block; }
+  .meta-block .value { font-size: 15px; font-weight: 700; color: var(--ink); }
+  .meta-block .value.red { color: var(--red); }
+  .meta-block .value.green { color: var(--green); }
+
+  .tldr { margin: 64px 0 0; padding: 56px 64px; background: var(--ink); color: var(--paper); position: relative; }
+  .tldr::before { content: 'BOTTOM LINE'; position: absolute; top: 24px; right: 32px; font-size: 12px; letter-spacing: 0.3em; font-weight: 800; color: var(--red); }
+  .tldr-label { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); font-weight: 700; margin-bottom: 22px; }
+  .tldr p { font-size: 20px; line-height: 1.55; font-weight: 400; max-width: 78ch; color: rgba(242,238,229,0.92); }
+  .tldr p + p { margin-top: 18px; }
+  .tldr strong { color: var(--paper); font-weight: 700; border-bottom: 2px solid var(--red); padding-bottom: 1px; }
+
+  section.chapter { padding: 96px 0 0; }
+  .chapter-header { display: grid; grid-template-columns: 140px 1fr; gap: 40px; margin-bottom: 48px; align-items: start; }
+  .chapter-num { font-size: 64px; font-weight: 800; line-height: 0.85; color: var(--red); letter-spacing: -0.02em; }
+  .chapter-num::after { content: ''; display: block; width: 50px; height: 4px; background: var(--ink); margin-top: 14px; }
+  .chapter-title-wrap .label { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: var(--ink-faint); margin-bottom: 14px; display: block; }
+  .chapter-title { font-size: clamp(28px, 3.4vw, 46px); font-weight: 800; line-height: 1.02; letter-spacing: -0.02em; max-width: 22ch; }
+  .chapter-title .alt { font-style: italic; color: var(--red); font-weight: 700; }
+
+  .body { max-width: 760px; }
+  .body p { font-size: 18px; line-height: 1.68; margin-bottom: 22px; }
+  .body p.lead { font-size: 22px; line-height: 1.5; font-weight: 500; margin-bottom: 32px; }
+  .body strong { font-weight: 700; }
+  .body h3 { font-size: 24px; font-weight: 800; margin: 36px 0 14px; letter-spacing: -0.01em; }
+  .body ul { list-style: none; margin: 16px 0 24px; }
+  .body ul li { padding: 7px 0 7px 28px; position: relative; font-size: 17px; line-height: 1.55; }
+  .body ul li::before { content: ''; position: absolute; left: 0; top: 15px; width: 12px; height: 2px; background: var(--red); }
+  .body ul li.yes::before, .body ul li.no::before, .body ul li.warn::before { display: none; }
+  .body ul li.yes { padding-left: 30px; } .body ul li.yes::after { content: '\2713'; position: absolute; left: 0; top: 6px; color: var(--green); font-weight: 800; }
+  .body ul li.no { padding-left: 30px; } .body ul li.no::after { content: '\2715'; position: absolute; left: 0; top: 6px; color: var(--red); font-weight: 900; }
+  .body ul li.warn { padding-left: 30px; } .body ul li.warn::after { content: '!'; position: absolute; left: 3px; top: 6px; color: var(--gold); font-weight: 900; }
+
+  .callout { margin: 32px 0; padding: 24px 28px; border-left: 4px solid var(--red); background: var(--red-tint); }
+  .callout.green { border-left-color: var(--green); background: var(--green-tint); }
+  .callout.gold { border-left-color: var(--gold); background: var(--gold-tint); }
+  .callout .ctitle { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 800; color: var(--red); margin-bottom: 10px; }
+  .callout.green .ctitle { color: var(--green); }
+  .callout.gold .ctitle { color: var(--red-deep); }
+  .callout p { font-size: 16px; line-height: 1.6; margin-bottom: 0; }
+  .callout p + p { margin-top: 12px; }
+
+  /* Risk table */
+  .risk-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 15px; }
+  .risk-table th { text-align: left; padding: 14px 14px; background: var(--ink); color: var(--paper); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; }
+  .risk-table td { padding: 16px 14px; border-bottom: 1px solid rgba(22,21,19,0.15); vertical-align: top; line-height: 1.5; }
+  .risk-table tr:nth-child(even) td { background: rgba(255,255,255,0.4); }
+  .rating { display: inline-block; padding: 3px 12px; border-radius: 100px; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+  .rating.low { background: var(--green-tint); color: var(--green); }
+  .rating.med { background: var(--gold-tint); color: var(--red-deep); }
+  .rating.high { background: var(--red-tint); color: var(--red); }
+
+  /* Two-card compare */
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 28px 0; }
+  .opt { padding: 26px 28px; background: var(--paper-deep); border-top: 5px solid var(--ink); }
+  .opt.recommend { border-top-color: var(--green); }
+  .opt .otag { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 800; color: var(--ink-faint); margin-bottom: 8px; }
+  .opt.recommend .otag { color: var(--green); }
+  .opt h4 { font-size: 19px; font-weight: 800; margin-bottom: 10px; }
+  .opt p { font-size: 15px; line-height: 1.55; margin-bottom: 0; }
+  .opt .price { font-size: 13px; font-weight: 700; color: var(--red-deep); margin-top: 12px; }
+
+  .sources { margin-top: 40px; padding: 28px 32px; background: var(--paper-deep); }
+  .sources .stitle { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 800; color: var(--ink-soft); margin-bottom: 14px; }
+  .sources ul { list-style: none; }
+  .sources li { font-size: 14px; line-height: 1.5; padding: 5px 0 5px 22px; position: relative; color: var(--ink-soft); word-break: break-word; }
+  .sources li::before { content: '\2192'; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+
+  .framing { margin: 96px -56px 0; padding: 88px 56px; background: var(--ink); color: var(--paper); }
+  .framing-inner { max-width: 1180px; margin: 0 auto; padding: 0 56px; }
+  .framing .label { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 800; color: var(--red); margin-bottom: 28px; }
+  .framing .quote { font-size: clamp(26px, 3vw, 40px); font-weight: 500; line-height: 1.3; max-width: 32ch; letter-spacing: -0.015em; }
+  .framing .quote .em { color: var(--red); font-style: italic; font-weight: 700; }
+
+  footer { padding: 64px 0 40px; border-top: 4px double rgba(22,21,19,0.2); margin-top: 0; }
+  .footer-end { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; color: var(--ink-faint); }
+  .footer-end .red { color: var(--red); }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 1000px) {
+    .container { padding: 0 32px; }
+    .topbar-inner { padding: 12px 32px; }
+    .hero-meta { grid-template-columns: 1fr 1fr; }
+    .chapter-header { grid-template-columns: 1fr; gap: 14px; }
+    .twocol { grid-template-columns: 1fr; }
+    .framing { margin: 64px -32px 0; padding: 56px 32px; }
+    .framing-inner { padding: 0; }
+    .risk-table { font-size: 13px; }
+    .risk-table th, .risk-table td { padding: 10px 8px; }
+  }
+  @media (max-width: 600px) {
+    .container { padding: 0 20px; }
+    .topbar-meta { display: none; }
+    .hero { padding: 130px 0 50px; }
+    .hero-meta { grid-template-columns: 1fr; gap: 18px; }
+    .tldr { padding: 36px 28px; } .tldr p { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-brand"><span class="topbar-mark"></span><span>Paradigm Group of Companies</span></div>
+    <div class="topbar-meta">Risk Analysis · IT &amp; AI · May 2026</div>
+  </div>
+</div>
+<div class="progress" id="progress"></div>
+
+<div class="container">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="eyebrow">
+    <span class="lead">For leadership review</span>
+    <span class="sep">/</span>
+    <span>Connecting Claude to Microsoft 365 and SharePoint</span>
+  </div>
+  <h1>Is this <span class="accent">safe</span> for Paradigm to turn on?</h1>
+
+  <div class="hero-meta">
+    <div class="meta-block"><span class="label">Question</span><span class="value">Can we connect Claude to our Microsoft 365 safely</span></div>
+    <div class="meta-block"><span class="label">Overall risk</span><span class="value green">Low to moderate, manageable</span></div>
+    <div class="meta-block"><span class="label">Recommendation</span><span class="value red">Yes, with a small pilot and controls</span></div>
+    <div class="meta-block"><span class="label">Facts verified against</span><span class="value">Official Anthropic and Microsoft documentation</span></div>
+  </div>
+
+  <div class="tldr">
+    <div class="tldr-label">If you only read this</div>
+    <p>Anthropic, the company behind Claude, offers an official connector that lets Claude search and read our Microsoft 365 content. It is <strong>read-only</strong>, which means Claude can find and summarize information but can never change, send, or delete anything. It only ever sees what the signed-in person can already see, and it only reaches into Microsoft when someone asks a question that needs it.</p>
+    <p>Under our paid plan, Anthropic <strong>does not use our data to train its models</strong>, and it does not keep copies of our files. The one genuine consideration is that, like almost every cloud service, the data is processed and stored on servers in the <strong>United States</strong>, not Canada.</p>
+    <p>For our most sensitive material, such as financial records and proprietary manufacturing methods, there are concrete controls we can put in place so Claude can never reach them, even if a staff member asks. My recommendation is to <strong>turn this on for a small pilot group first</strong>, with those controls in place, and expand once we are comfortable.</p>
+  </div>
+</section>
+
+<!-- CHAPTER 1 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">01</div>
+    <div class="chapter-title-wrap">
+      <span class="label">What we are actually turning on</span>
+      <h2 class="chapter-title">A read-only assistant, <span class="alt">not a new door into our data.</span></h2>
+    </div>
+  </div>
+  <div class="body">
+    <p class="lead">We are turning on the official Microsoft 365 connector built by Anthropic. It is a finished, supported product, not an experiment, and it is included in the Claude plan we already pay for.</p>
+    <p>Once it is on, a staff member who links their own Microsoft account can ask Claude things like "find the Q4 planning document" or "summarize the email thread with the lumber supplier." Claude finds the right file or email, reads it, and answers, with links back to the source. The person does not have to download, upload, or paste anything.</p>
+    <p>The most important thing to understand is what it <strong>cannot</strong> do. The connector is read-only:</p>
+    <ul>
+      <li class="no">It cannot send an email or reply to one</li>
+      <li class="no">It cannot create, edit, or delete a file in SharePoint or OneDrive</li>
+      <li class="no">It cannot add or change a calendar event</li>
+      <li class="no">It cannot post in Teams or change any permission or setting</li>
+      <li class="no">It cannot see anything the signed-in person could not already open themselves</li>
+    </ul>
+    <p>In other words, the connector does not give Claude any access that our staff do not already have. It lets Claude look, on a person's behalf, at things that person could already look at.</p>
+  </div>
+</section>
+
+<!-- CHAPTER 2 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">02</div>
+    <div class="chapter-title-wrap">
+      <span class="label">Where our data goes, and who can see it</span>
+      <h2 class="chapter-title">The honest answer on data, <span class="alt">storage, and training.</span></h2>
+    </div>
+  </div>
+  <div class="body">
+    <p class="lead">This is the section that matters most for a risk decision, so I have kept it plain and complete. Every point here is verified against Anthropic's official documentation.</p>
+
+    <h3>Is our data used to train Claude?</h3>
+    <p>No. On our paid commercial plan, Anthropic does not use our conversations or our Microsoft 365 content to train its models. This is part of their commercial terms and is the default, not a setting we have to switch on. The recent change that allows training on personal data applies only to individual consumer accounts, not to business plans like ours.</p>
+
+    <h3>Does Anthropic keep copies of our files?</h3>
+    <p>The connector does not store or cache the content of our files. Each request pulls only what is needed to answer the question and is cleaned up after the answer is given. The one nuance worth stating clearly: if the answer becomes part of a saved chat, that chat is kept in the user's history until they delete it, and is then removed from Anthropic's systems within 30 days. So the file itself is not copied, but a saved conversation that quoted from it lives in that chat until deleted.</p>
+
+    <h3>Where is the data processed and stored?</h3>
+    <p>On servers in the <strong>United States</strong>. Anthropic may route traffic through other regions, but storage for our type of plan is in the US. A Canadian-hosted option exists only for a different, developer-style deployment, not for the product this connector runs on, and even a Canadian location would not change the fact that Anthropic is a US company subject to US law. This is the same situation as most cloud tools we already use, but it is the one point I want leadership to be aware of rather than gloss over.</p>
+
+    <h3>Can Anthropic or Claude "see" our information?</h3>
+    <p>To answer a question, Claude's systems do read the relevant text in order to process it. That is true of every AI assistant. It is protected by strong encryption in transit and storage, by Anthropic's security certifications, by the no-training guarantee, and by the 30-day deletion of saved chats. It is not, however, a system where Anthropic can never technically see the content. I would rather state that plainly than overstate the protection.</p>
+
+    <div class="callout green">
+      <div class="ctitle">In short</div>
+      <p>Not used for training. Files not copied. Encrypted in transit and at rest. Stored in the US. Deleted from saved chats within 30 days of deletion. Strong, audited security controls, but not a zero-knowledge system.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 3 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">03</div>
+    <div class="chapter-title-wrap">
+      <span class="label">The safety guarantees we can rely on</span>
+      <h2 class="chapter-title">Five protections that are built in <span class="alt">by design.</span></h2>
+    </div>
+  </div>
+  <div class="body">
+    <ul>
+      <li class="yes"><strong>It inherits permissions, it does not expand them.</strong> Claude acts on behalf of the signed-in person and can only reach what that person can already reach. If a folder is locked to someone in Microsoft, it stays locked to Claude for that person.</li>
+      <li class="yes"><strong>Read-only.</strong> Nothing in Microsoft can be changed, sent, or deleted through the connector. The worst case is that Claude reads something a person could already have read.</li>
+      <li class="yes"><strong>On-demand only.</strong> The connector does not sit in the background scanning our SharePoint. It only reaches in when a person asks a question that needs it.</li>
+      <li class="yes"><strong>Revocable at three independent levels.</strong> Any user can disconnect their own account; we can switch the connector off for the whole company in Claude; and our Microsoft administrator can withdraw consent on the Microsoft side. Any one of these cuts access immediately.</li>
+      <li class="yes"><strong>Fully auditable.</strong> Because everything runs through Microsoft with each person's identity, our administrator can see what was queried, by whom, and when, in our existing Microsoft logs.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- CHAPTER 4 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">04</div>
+    <div class="chapter-title-wrap">
+      <span class="label">The risks, rated honestly</span>
+      <h2 class="chapter-title">What could go wrong, <span class="alt">how likely, and how we handle it.</span></h2>
+    </div>
+  </div>
+  <div class="body" style="max-width: none;">
+    <table class="risk-table">
+      <thead>
+        <tr><th style="width:26%">Risk</th><th style="width:13%">Likelihood</th><th style="width:13%">Impact</th><th style="width:48%">How we reduce it</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Company data is processed on US servers</strong></td>
+          <td><span class="rating med">Certain</span></td>
+          <td><span class="rating low">Low</span></td>
+          <td>Encrypted in transit and storage; not used for training; deleted from saved chats within 30 days. Same posture as our existing cloud tools. We keep the most sensitive content out of reach (see chapter 5).</td>
+        </tr>
+        <tr>
+          <td><strong>Claude surfaces a financial or HR file to a staff member through search</strong></td>
+          <td><span class="rating med">Possible</span></td>
+          <td><span class="rating med">Moderate</span></td>
+          <td>The person could already open that file directly, so this is really an existing permissions question. We block those sites from Claude using the controls in chapter 5, and tighten who has access.</td>
+        </tr>
+        <tr>
+          <td><strong>Proprietary manufacturing methods are read by Claude</strong></td>
+          <td><span class="rating low">Unlikely</span></td>
+          <td><span class="rating high">High if it happened</span></td>
+          <td>Keep this content on sites that are blocked from Claude's reach and restricted to a small group. Combined with the no-training guarantee, the exposure is contained. This is the crown-jewel case and we treat it as such.</td>
+        </tr>
+        <tr>
+          <td><strong>Meeting recordings and transcripts are readable</strong></td>
+          <td><span class="rating med">Possible</span></td>
+          <td><span class="rating med">Moderate</span></td>
+          <td>This is the single most sensitive permission in the set. We can strip just the meeting-recording permissions during setup and lose nothing else.</td>
+        </tr>
+        <tr>
+          <td><strong>Shared mailboxes (such as info@ or support@) are readable</strong></td>
+          <td><span class="rating low">Possible</span></td>
+          <td><span class="rating low">Low</span></td>
+          <td>Only readable by people who already have access to those mailboxes. We review who that is during the pilot.</td>
+        </tr>
+        <tr>
+          <td><strong>A US legal request reaches data stored at Anthropic</strong></td>
+          <td><span class="rating low">Unlikely</span></td>
+          <td><span class="rating med">Moderate</span></td>
+          <td>Real but low-probability, and true of most US cloud tools we use. Keeping crown-jewel content blocked from Claude is the main mitigation.</td>
+        </tr>
+        <tr>
+          <td><strong>An Anthropic employee improperly views data</strong></td>
+          <td><span class="rating low">Unlikely</span></td>
+          <td><span class="rating med">Moderate</span></td>
+          <td>Governed by Anthropic's security certifications (SOC 2 Type 2, ISO 27001), internal access controls, and the no-training commitment.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <div class="ctitle">The one risk that is not really about Claude</div>
+      <p>If we worry that Claude might show someone a sensitive file, the deeper truth is that the person can already open that file today. Claude does not create new access. So the strongest thing we gain from this exercise is a reason to make sure our SharePoint permissions are actually what we think they are. That is good hygiene regardless of Claude.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 5 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">05</div>
+    <div class="chapter-title-wrap">
+      <span class="label">Protecting our crown jewels</span>
+      <h2 class="chapter-title">How we wall off finance, HR, <span class="alt">and manufacturing secrets.</span></h2>
+    </div>
+  </div>
+  <div class="body">
+    <p class="lead">This is the part I researched most carefully, because it is where a wrong assumption could cost us. Here is what actually works, verified against both Anthropic and Microsoft documentation.</p>
+
+    <h3>What does not work</h3>
+    <p>A common assumption is that we can give Claude access to some SharePoint sites and not others by adjusting Microsoft permissions site by site. Anthropic's own documentation states clearly that this site-by-site approach is <strong>not supported</strong> for this connector, because the search it uses looks across the whole tenant. So we should not rely on it.</p>
+
+    <h3>The hard block that does work</h3>
+    <p>Microsoft has a feature called <strong>Restricted Content Discovery</strong>. When we switch it on for a specific site, that site's content is removed from the company-wide search that Claude depends on. The people who already have access can still open the files directly, but Claude can no longer find them. Microsoft's documentation confirms this is designed for exactly this purpose, and independent testing confirms it stops Claude.</p>
+
+    <div class="callout gold">
+      <div class="ctitle">Important cost catch, and the smart way around it</div>
+      <p>Restricted Content Discovery requires at least one Microsoft Copilot license in our tenant, or a paid add-on. We just cancelled our three Copilot licenses to save about $1,465 per year, so this feature will switch off after June 2 unless we act.</p>
+      <p>The smart, lowest-cost path is to keep <strong>one</strong> Copilot license active (about $488 per year) rather than buy a separate add-on for many users. One license unlocks Restricted Content Discovery across the whole tenant. We would still save roughly $980 per year versus the three licenses we had, and gain a real hard block on sensitive sites. I will confirm the exact cheapest route before we commit.</p>
+    </div>
+
+    <h3>The free layers we add on top</h3>
+    <ul>
+      <li class="yes"><strong>Permission hygiene.</strong> Because Claude inherits each person's access, the cleanest protection costs nothing: make sure the people who use Claude do not have access to the crown-jewel sites in the first place. If they cannot open it, neither can Claude.</li>
+      <li class="yes"><strong>A company instruction for Claude.</strong> We can give Claude a standing rule never to look at named sensitive sites, even if asked. This is a softer block that relies on Claude following the instruction, but it adds a useful extra layer and costs nothing.</li>
+      <li class="yes"><strong>Strip the riskiest permissions.</strong> During setup we can remove specific permissions, such as access to meeting recordings, without losing the rest of the connector.</li>
+    </ul>
+    <p>Used together, these give us a strong, layered defense around finance, HR, and our manufacturing know-how.</p>
+  </div>
+</section>
+
+<!-- CHAPTER 6 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">06</div>
+    <div class="chapter-title-wrap">
+      <span class="label">Outlook, specifically</span>
+      <h2 class="chapter-title">What to know about <span class="alt">email and the connector.</span></h2>
+    </div>
+  </div>
+  <div class="body">
+    <ul>
+      <li class="yes"><strong>Read-only here too.</strong> Claude can read and summarize email but cannot send, reply, forward, or delete. This is actually stricter than the Google version of the connector, which can draft replies.</li>
+      <li class="warn"><strong>Shared mailboxes are included.</strong> If a person has access to a shared mailbox such as info@ or accounts@, Claude can read those messages for them as well. We confirm who has shared-mailbox access during the pilot.</li>
+      <li class="yes"><strong>Personal inboxes stay personal.</strong> Claude only reads the signed-in person's own mail and the shared mailboxes they already use. It cannot read a colleague's private inbox.</li>
+      <li class="warn"><strong>Archived mail is included.</strong> The read permission covers archived messages, not just the current inbox. Worth knowing for anything sensitive sitting in old email.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- CHAPTER 7 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">07</div>
+    <div class="chapter-title-wrap">
+      <span class="label">My recommendation</span>
+      <h2 class="chapter-title">Turn it on carefully, <span class="alt">in two phases.</span></h2>
+    </div>
+  </div>
+  <div class="body">
+    <p class="lead">The risk is low to moderate and well understood, and the controls are real. I recommend we proceed, starting small.</p>
+
+    <h3>Before we switch anything on</h3>
+    <ul>
+      <li class="yes">Decide on the crown-jewel protection: keep one Copilot license to enable the hard block, or rely on permission hygiene and the company instruction for the pilot.</li>
+      <li class="yes">Identify the specific finance, HR, and manufacturing sites to wall off.</li>
+      <li class="yes">Decide whether to strip the meeting-recording permission from the start.</li>
+    </ul>
+
+    <h3>Phase one, a small pilot (about three weeks)</h3>
+    <ul>
+      <li class="yes">Our IT support partner grants the one-time Microsoft approval and limits the connector to a small pilot group.</li>
+      <li class="yes">Pilot group of about five people across the divisions, using it in real work.</li>
+      <li class="yes">We watch what works, what surprises us, and what makes anyone uncomfortable.</li>
+    </ul>
+
+    <h3>Phase two, broader rollout (weeks four to eight)</h3>
+    <ul>
+      <li class="yes">Write a short staff usage policy.</li>
+      <li class="yes">Run a 30-minute training session per division.</li>
+      <li class="yes">Expand access based on what we learned, with the sensitive-site blocks confirmed in place.</li>
+    </ul>
+
+    <div class="callout green">
+      <div class="ctitle">Cost to the company</div>
+      <p>The connector itself is included in our existing plan at no extra cost. The only optional spend is keeping one Copilot license (about $488 per year) to enable the hard block on sensitive sites, which still leaves us saving against what we paid before.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 8 -->
+<section class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-num">08</div>
+    <div class="chapter-title-wrap">
+      <span class="label">Honest open items</span>
+      <h2 class="chapter-title">What I still need to <span class="alt">confirm before go-live.</span></h2>
+    </div>
+  </div>
+  <div class="body">
+    <ul>
+      <li class="warn">The exact cheapest licensing route to keep Restricted Content Discovery available after our Copilot cancellation. I will confirm with our IT partner and Microsoft before we commit any spend.</li>
+      <li class="warn">Whether any of our existing SharePoint sites are already hidden from company-wide search, which would mean they are already out of Claude's reach.</li>
+      <li class="warn">Final confirmation from our IT partner on the one-time Microsoft approval step and which permissions they are comfortable granting.</li>
+    </ul>
+
+    <div class="sources">
+      <div class="stitle">Verified against these official sources, May 2026</div>
+      <ul>
+        <li>Anthropic, Microsoft 365 connector security guide (read-only scope, delegated permissions, on-demand, no file caching, site-by-site permissioning not supported)</li>
+        <li>Anthropic, Microsoft 365 connector setup guide (plans, admin consent, admin controls)</li>
+        <li>Anthropic Privacy Center, "Is my data used for model training" (commercial data not used for training)</li>
+        <li>Anthropic Privacy Center, organization data retention and server location (US storage, 30-day deletion)</li>
+        <li>Anthropic, regional compliance and security (SOC 2 Type 2, ISO 27001, AES-256 at rest, TLS in transit)</li>
+        <li>Microsoft Learn, Restricted Content Discovery and SharePoint Advanced Management licensing (how the hard block works and what license it needs)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="framing">
+  <div class="framing-inner">
+    <div class="label">The bottom line for our decision</div>
+    <div class="quote">The risk is not Claude exceeding our permissions. It is making sure <span class="em">our own permissions are clean</span>, and keeping our crown jewels out of reach. Both are in our control.</div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-end">
+      <div>Paradigm Group of Companies · IT &amp; AI · Internal · Confidential</div>
+      <div class="red">Future Ready Homes. Built Today.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const progress = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = ((scrolled / total) * 100) + '%';
+  });
+  const revealEls = document.querySelectorAll('.chapter, .tldr, .framing');
+  revealEls.forEach(el => el.classList.add('reveal'));
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.06, rootMargin: '0px 0px -60px 0px' });
+  revealEls.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
