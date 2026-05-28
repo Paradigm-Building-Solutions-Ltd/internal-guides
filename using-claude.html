@@ -186,6 +186,30 @@
   }
   .topbar-right { display: flex; align-items: center; gap: 12px; }
 
+  /* Home / All Guides button */
+  .topbar-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border-strong);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 12px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+  .topbar-home:hover { background: var(--glass-bg-strong); transform: translateY(-1px); }
+
   /* Theme toggle */
   .theme-toggle {
     background: var(--glass-bg);
@@ -1898,6 +1922,7 @@
       </div>
       <div class="topbar-right">
         <div class="topbar-tag">Future Ready Homes. Built Today.</div>
+        <a class="topbar-home" href="https://guides.pgc.ca/">&#8592; All Guides</a>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
           <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="4"/>
