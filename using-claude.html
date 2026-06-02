@@ -1960,7 +1960,7 @@
 
   <!-- ════════ HERO ════════ -->
   <div class="hero">
-    <div class="hero-eyebrow reveal"><span class="pulse"></span>Internal Guide · Version 3.0 · May 2026</div>
+    <div class="hero-eyebrow reveal"><span class="pulse"></span>Internal Guide · Version 3.1 · June 2026 · Now on Opus 4.8</div>
     <h1 class="reveal delay-1">How to use <span class="accent">Claude</span><br>at PGC.</h1>
     <p class="lead reveal delay-2">A simple, practical guide to working with your AI co-worker. What it can do, how to stay safe, which settings matter, and how to get more out of it every single day. No technical background needed.</p>
     <div class="scroll-hint reveal delay-3">Scroll to begin</div>
@@ -2167,8 +2167,8 @@
 
         <div class="model-card opus">
           <span class="model-tag">Heavy Lifting</span>
-          <div class="model-name">Opus 4.7</div>
-          <div class="model-tagline">The deeper thinker. Slower and uses more allowance, but the smartest model when it matters.</div>
+          <div class="model-name">Opus 4.8</div>
+          <div class="model-tagline">The deeper thinker, and Anthropic's most capable model yet. Slower and uses more allowance, but the smartest model when it matters.</div>
 
           <div class="model-section">Great for</div>
           <ul class="model-list">
@@ -2180,11 +2180,12 @@
             <li>Anything you would normally hand to a senior expert</li>
           </ul>
 
-          <div class="model-section">Why pick it</div>
+          <div class="model-section">New in 4.8</div>
           <ul class="model-list">
-            <li>Better at hard reasoning and long context</li>
-            <li>Catches details Sonnet might miss</li>
-            <li>Best for work where mistakes are costly</li>
+            <li>Better judgment and a more reliable collaborator on multi-step work</li>
+            <li>More honest: roughly 4× less likely than 4.7 to let its own mistakes slip through unflagged</li>
+            <li>Holds longer documents and conversations in mind without losing the thread</li>
+            <li>New <strong>effort control</strong> lets you dial how hard it works (see below)</li>
           </ul>
         </div>
       </div>
@@ -2194,7 +2195,7 @@
         <div class="wb-icon">⚡</div>
         <div class="wb-text">
           <span class="wb-title">Heads up about Opus usage</span>
-          <p>Opus uses <strong>five times more</strong> of your weekly and daily allowance than Sonnet. If you use Opus for every task, you will hit your usage limit much sooner and be locked out until it resets. Save Opus for the work that genuinely needs it. For everything else, Sonnet does the job at a fraction of the cost.</p>
+          <p>Opus uses <strong>five times more</strong> of your weekly and daily allowance than Sonnet. If you use Opus for every task, you will hit your usage limit much sooner and be locked out until it resets. Save Opus for the work that genuinely needs it. For everything else, Sonnet does the job at a fraction of the cost. <strong>Tip:</strong> if you do need Opus but the task is not that hard, drop the new <strong>effort control</strong> to a lower setting (see the next section) to stretch your allowance further.</p>
         </div>
       </div>
 
@@ -2210,7 +2211,7 @@
         <span class="section-num">03</span>
         <span class="section-line"></span>
       </div>
-      <h2>Adaptive <span class="em">thinking</span>.</h2>
+      <h2>Thinking &amp; <span class="em">effort</span>.</h2>
       <p class="intro">There is a toggle called <strong style="color: var(--text);">Adaptive thinking</strong> that tells Claude to slow down and reason through a problem step by step before answering, like a person scribbling on a notepad before speaking. Use it when accuracy matters more than speed.</p>
 
       <div class="model-grid compact">
@@ -2229,6 +2230,27 @@
       <div class="setting-card">
         <div class="icon-wrap">⚙️</div>
         <div class="sc-text"><strong>Where to find it:</strong> click the <span class="path">model picker</span> at the top of the chat (where you choose Sonnet or Opus). The <strong>Adaptive thinking</strong> toggle is inside that dropdown. There is also a quick toggle near the send button at the bottom right of the chat input.</div>
+      </div>
+
+      <h3 style="font-size: clamp(18px, 2.4vw, 22px); font-weight: 700; color: var(--text); margin: 38px 0 10px; letter-spacing: -0.015em;">New on Opus 4.8: <span style="font-style: italic; color: var(--red-text);">effort control</span></h3>
+      <p class="intro" style="margin-bottom: 22px;">Opus 4.8 added an <strong style="color: var(--text);">effort control</strong> right next to the model picker. It lets you decide how hard Claude works on a response, the same way you might tell a colleague "just a quick take" or "really dig into this." Claude starts on <strong style="color: var(--text);">high</strong> effort by default, so you only need to touch it when you want something different.</p>
+
+      <div class="model-grid compact">
+        <div class="feature-card">
+          <div class="fc-icon green">⚡</div>
+          <h4>Lower effort</h4>
+          <p>Faster, lighter answers, and it uses less of your allowance. Good for quick takes, simple lookups, and first drafts where you do not need deep reasoning.</p>
+        </div>
+        <div class="feature-card">
+          <div class="fc-icon">🧠</div>
+          <h4>Higher effort</h4>
+          <p>Claude thinks more often and more deeply for a better, more thorough answer. Best for complex analysis, important documents, and high-stakes work. This is the default.</p>
+        </div>
+      </div>
+
+      <div class="simple-tip">
+        <span class="st-icon">💡</span>
+        <p><strong>Thinking vs. effort, in plain terms.</strong> <span class="pill-green">Adaptive thinking</span> decides <em>whether</em> Claude reasons before answering. <span class="pill-red">Effort</span> decides <em>how much</em> work it puts in overall. On easy tasks, lowering effort gives you faster replies and saves your Opus allowance; on hard ones, leave it on high. Effort control is available on Claude on the web and in Cowork.</p>
       </div>
     </div>
 
@@ -2552,8 +2574,8 @@
         <div class="tip">🎨 <strong>Say the brand.</strong> For any external or client-facing content, say "this is for PGC" (or Buildforth, Solar, StokedLiving) so the right voice and colours apply.</div>
         <div class="tip">🔁 <strong>Iterate.</strong> Ask Claude to refine its own draft. "Make this more concise", "make it less formal", "try a different angle".</div>
         <div class="tip">🦺 <strong>Safety questions.</strong> Just ask naturally. "What PPE do I need for working at heights?"</div>
-        <div class="tip">🧠 <strong>Hard problem?</strong> Switch to Opus and turn on Adaptive Thinking. The wait is worth it.</div>
-        <div class="tip">⚡ <strong>Quick task?</strong> Stay on Sonnet with thinking off. Faster, lighter, plenty smart.</div>
+        <div class="tip">🧠 <strong>Hard problem?</strong> Switch to Opus 4.8, turn on Adaptive Thinking, and keep effort on high. The wait is worth it.</div>
+        <div class="tip">⚡ <strong>Quick task?</strong> Stay on Sonnet with thinking off, or drop Opus to lower effort. Faster, lighter, plenty smart.</div>
         <div class="tip">🔧 <strong>Use the right skill.</strong> Add "find and use the best skill for this" to the end of any prompt.</div>
         <div class="tip">⏰ <strong>Schedule it.</strong> If you do something every Monday, ask Cowork to handle it on a schedule.</div>
         <div class="tip">👁️ <strong>Always review.</strong> Claude gives you a first draft, not a final product.</div>
@@ -2582,7 +2604,7 @@
     <span class="sep">·</span>
     Questions? <a href="mailto:deeparsh.dang@pgc.ca">deeparsh.dang@pgc.ca</a> or <a href="mailto:amy.reynolds@pgc.ca">amy.reynolds@pgc.ca</a>
     <span class="sep">·</span>
-    Issued May 2026 · v3.0
+    Issued June 2026 · v3.1
   </div>
 
 </div><!-- /wrap -->
