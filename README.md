@@ -52,6 +52,28 @@ guide to a SharePoint location that requires M365 sign-in.
 
 ---
 
+## ✍ Writing style (mandatory for every guide)
+
+These rules are not optional. They apply to all visible text in every guide.
+
+- **Never use em dashes (`—`) or en dashes (`–`) anywhere in guide text.** This
+  includes body copy, headings, list items, captions, and callouts. Use a
+  period, comma, colon, or parentheses instead. The title-tag suffix uses a
+  colon: `<title>Title: Paradigm Internal Guide</title>` (not an em dash).
+- **Write simply. No fluff.** Cut filler and self-congratulatory phrasing.
+  Banned words/phrases: "no-jargon", "seamless(ly)", "simply", "just",
+  "effortless", "two-minute walkthrough", "in no time", "don't worry". State
+  what to do, plainly.
+- **Short sentences.** One instruction per sentence where possible. Prefer
+  active voice ("Click Add" not "the Add button should be clicked").
+- **Assume zero technical knowledge** for end-user (`all-staff`) guides: name
+  exactly what to click, where it is on screen, and what will happen next.
+- **Name things exactly.** Use the real network name, button label, or menu
+  item (e.g. "Paradigm Corporate Wi-Fi", `Printers & scanners`), not vague
+  references like "the office network" or "the settings".
+
+---
+
 ## Architecture (so you know what you're touching)
 
 ```
@@ -144,7 +166,7 @@ Every guide MUST have these elements in the `<head>`, in this order:
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <meta name="referrer" content="no-referrer">
-<title>[Descriptive title] — Paradigm Internal Guide</title>
+<title>[Descriptive title]: Paradigm Internal Guide</title>
 ```
 
 The two `<meta>` tags after viewport are non-negotiable anti-indexing controls.
@@ -252,7 +274,7 @@ scratch — always copy.)
 ### Step 3 — Edit the new file
 
 In the new `.html`:
-- Update `<title>` to a descriptive name ending with `— Paradigm Internal Guide`
+- Update `<title>` to a descriptive name ending with `: Paradigm Internal Guide`
 - Update the eyebrow / hero / lede to match the new topic
 - Replace all body content
 - Update any meta blocks (audience, last-updated, etc.)
@@ -321,7 +343,8 @@ Run through this checklist mentally:
 
 - [ ] New `.html` file has the four required `<meta>` tags in `<head>`
 - [ ] Filename is lowercase, hyphenated, ends in `.html`
-- [ ] `<title>` ends with `— Paradigm Internal Guide`
+- [ ] `<title>` ends with `: Paradigm Internal Guide`
+- [ ] No em dashes (`—`) or en dashes (`–`) anywhere in the guide text (see Writing style)
 - [ ] Content contains no secrets, no internal IPs, no leaked credentials
 - [ ] A matching `<a class="guide">` card exists in `index.html`
 - [ ] `data-tags` on the card lists every applicable canonical tag
