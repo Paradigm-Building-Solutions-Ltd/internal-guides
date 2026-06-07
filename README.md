@@ -283,32 +283,33 @@ In the new `.html`:
 
 ### Step 4 — Add a card to `index.html`
 
+The landing page lays guides out as a **responsive card grid** (`.guides` is
+`grid-template-columns: repeat(auto-fill, minmax(290px, 1fr))`), so it auto-fits
+1 column on mobile up to 4 on a wide screen. You do not size or place cards
+yourself; just add a card and the grid flows it in.
+
 Open `index.html`. Find the `<div class="guides" id="guides">` section.
-Inside that div, copy an existing `<a class="guide">` block. The structure:
+Inside that div, copy an existing `<a class="guide">` block. The structure
+(a flat card, no visible number):
 
 ```html
 <a href="/<new-slug>"
    class="guide"
+   data-num="<NN>"
    data-title="<exact same title as in the .html file>"
-   data-desc="<one-line description — appears below the title>"
+   data-desc="<one-line description; drives search>"
    data-tags="<space-separated tags from the canonical list>">
-  <div class="guide-num">0<span class="slash">/</span><NEW-NUMBER></div>
-  <div class="guide-body">
-    <span class="guide-eyebrow">For <audience description></span>
-    <h2 class="guide-title"><same title></h2>
-    <p class="guide-desc">
-      <description — can be longer here than data-desc; this is what users see>
-    </p>
-    <div class="guide-tags">
-      <span class="guide-tag audience">For <audience></span>
-      <span class="guide-tag topic"><topic 1></span>
-      <span class="guide-tag topic"><topic 2></span>
-    </div>
+  <span class="guide-eyebrow">For <audience description></span>
+  <h2 class="guide-title"><same title></h2>
+  <p class="guide-desc"><short description shown on the card></p>
+  <div class="guide-tags">
+    <span class="guide-tag audience">For <audience></span>
+    <span class="guide-tag topic"><topic 1></span>
+    <span class="guide-tag topic"><topic 2></span>
   </div>
-  <div class="guide-side">
-    <div class="guide-meta">Updated <span class="red"><Month Year></span></div>
-    <div class="guide-meta">~ <N> min read</div>
-    <div class="guide-arrow"><span>Read guide</span><span class="arrow">→</span></div>
+  <div class="guide-foot">
+    <span class="guide-meta">Updated <span class="red"><Month Year></span> · ~<N> min</span>
+    <span class="guide-arrow">Read<span class="arrow">→</span></span>
   </div>
 </a>
 ```
@@ -316,9 +317,10 @@ Inside that div, copy an existing `<a class="guide">` block. The structure:
 **Key requirements:**
 - `href` = `/` + slug (no `.html` extension — Pages auto-resolves)
 - `data-title` / `data-desc` / `data-tags` drive search and filtering — they MUST be present
-- Guide number = next sequential (existing are `01`, `02` → new is `03`, etc.)
+- `data-num` = the next number for **internal record only** (`01`, `02`, `03`…). It is **not displayed** to users and is NOT a layout concern. Gaps are fine when guides are hidden or deleted — never renumber to "close a gap".
 - `data-tags` and visible `<span class="guide-tag">` should match each other
 - Audience tag uses the visible label "For all staff" or "For IT / admins" but the `data-tags` attribute uses the slug form (`all-staff`, `it`)
+- Keep `data-desc` and the visible `<p class="guide-desc">` short (one or two sentences) so card heights stay even across the grid
 
 ### Step 5 — Add a filter chip (only if introducing a NEW tag)
 
@@ -349,7 +351,7 @@ Run through this checklist mentally:
 - [ ] A matching `<a class="guide">` card exists in `index.html`
 - [ ] `data-tags` on the card lists every applicable canonical tag
 - [ ] Visible `<span class="guide-tag">` items on the card match `data-tags`
-- [ ] Guide number on the card is sequential
+- [ ] `data-num` is set on the card (internal record only; not displayed)
 - [ ] If a new tag was introduced, the filter chip was added AND the tag was added to the README taxonomy
 
 ### Step 7 — Commit and push
@@ -408,8 +410,8 @@ git push
    git rm <slug>.html
    ```
 2. Remove the matching `<a class="guide">` card from `index.html`
-3. **Re-number the remaining cards** — guides 01, 02, 03 should stay sequential
-   with no gaps (the number is cosmetic but the convention is "no gaps")
+3. **Do NOT renumber.** `data-num` is an internal record, not displayed, so a gap
+   (e.g. 01, 03, 04) is fine and expected. Leave the other cards untouched.
 4. If the deleted guide was the only one using a particular tag, also:
    - Remove the now-unused filter chip from `index.html`
    - Remove the tag from this README's taxonomy table

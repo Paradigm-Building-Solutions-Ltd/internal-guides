@@ -395,56 +395,35 @@
   .reset-all:hover { color: var(--red-deep); }
   .reset-all.visible { display: inline-flex; }
 
-  /* ─────────────────── GUIDE LIST ─────────────────── */
+  /* ─────────────────── GUIDE GRID ─────────────────── */
+  /* Column count is fixed per breakpoint: 4 → 3 → 2. Never drops to 1. */
   .guides {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
   }
 
   .guide {
-    display: grid;
-    grid-template-columns: 200px 1fr 220px;
-    gap: 48px;
-    padding: 48px 0;
-    border-top: 1px solid rgba(22,21,19,0.15);
+    display: flex;
+    flex-direction: column;
+    background: var(--paper-card);
+    border: 1px solid rgba(22,21,19,0.12);
+    border-top: 3px solid var(--ink);
+    padding: 30px 28px 24px;
     text-decoration: none;
     color: var(--ink);
-    transition: background 0.2s ease;
     position: relative;
-    align-items: start;
+    transition: border-top-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
   }
-  .guide:last-child { border-bottom: 1px solid rgba(22,21,19,0.15); }
   .guide:hover {
-    background: rgba(255, 255, 255, 0.4);
+    border-top-color: var(--red);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px -20px rgba(22,21,19,0.45);
   }
-  .guide::after {
-    content: '';
-    position: absolute;
-    left: 0; top: -1px;
-    width: 0;
-    height: calc(100% + 2px);
-    background: var(--red);
-    transition: width 0.2s ease;
-    z-index: -1;
-    opacity: 0.06;
-  }
-  .guide:hover::after { width: 100%; }
 
-  .guide-num {
-    font-size: 56px;
-    font-weight: 200;
-    line-height: 0.9;
-    color: var(--ink);
-    letter-spacing: -0.025em;
-  }
-  .guide-num .slash { color: var(--red); font-weight: 600; }
-
-  .guide-body {
-    max-width: 60ch;
-  }
   .guide-eyebrow {
-    font-size: 10px;
-    letter-spacing: 0.22em;
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     font-weight: 800;
     color: var(--red);
@@ -452,71 +431,77 @@
     display: block;
   }
   .guide-title {
-    font-size: 32px;
+    font-size: 23px;
     font-weight: 800;
-    line-height: 1.05;
+    line-height: 1.12;
     letter-spacing: -0.018em;
     margin-bottom: 12px;
     color: var(--ink);
   }
   .guide:hover .guide-title { color: var(--red); }
   .guide-desc {
-    font-size: 17px;
+    font-size: 14.5px;
     line-height: 1.55;
     color: var(--ink-soft);
-    margin-bottom: 18px;
+    margin-bottom: 20px;
+    flex-grow: 1;
   }
   .guide-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
+    margin-bottom: 20px;
   }
   .guide-tag {
     display: inline-block;
-    padding: 4px 10px;
+    padding: 4px 9px;
     background: transparent;
     border: 1px solid rgba(22,21,19,0.2);
     color: var(--ink-soft);
-    font-size: 10px;
+    font-size: 9.5px;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
   }
   .guide-tag.audience { background: var(--ink); color: var(--paper); border-color: var(--ink); }
   .guide-tag.topic { background: var(--red-tint); color: var(--red-deep); border-color: rgba(200, 32, 44, 0.2); }
 
-  .guide-side {
-    text-align: right;
-    padding-top: 8px;
+  .guide-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid rgba(22,21,19,0.12);
   }
   .guide-meta {
-    font-size: 10px;
-    letter-spacing: 0.18em;
+    font-size: 9.5px;
+    letter-spacing: 0.13em;
     text-transform: uppercase;
     color: var(--ink-faint);
     font-weight: 700;
-    margin-bottom: 8px;
   }
   .guide-meta .red { color: var(--red); }
   .guide-arrow {
-    margin-top: 24px;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-size: 11px;
-    letter-spacing: 0.22em;
+    gap: 7px;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--ink);
     font-weight: 800;
+    white-space: nowrap;
     transition: gap 0.2s ease, color 0.2s ease;
   }
   .guide-arrow .arrow {
-    font-size: 18px;
+    font-size: 15px;
     line-height: 1;
     transition: transform 0.2s ease;
   }
-  .guide:hover .guide-arrow { gap: 14px; color: var(--red); }
-  .guide:hover .guide-arrow .arrow { transform: translateX(4px); }
+  .guide:hover .guide-arrow { gap: 11px; color: var(--red); }
+  .guide:hover .guide-arrow .arrow { transform: translateX(3px); }
 
   .guide.hidden { display: none; }
 
@@ -622,16 +607,23 @@
   }
 
   /* ─────────────────── RESPONSIVE ─────────────────── */
+  /* ≤1100: 3 columns */
   @media (max-width: 1100px) {
     .container { padding: 0 40px; }
     .hero-meta { grid-template-columns: 1fr 1fr; gap: 24px; }
     .dir-header { grid-template-columns: 1fr; gap: 16px; }
     .controls { grid-template-columns: 1fr; gap: 16px; }
     .controls-label { display: none; }
-    .guide { grid-template-columns: 80px 1fr; gap: 24px; }
-    .guide-side { grid-column: 2; text-align: left; padding-top: 4px; }
-    .guide-meta { display: inline-block; margin-right: 16px; }
     .footer-grid { grid-template-columns: 1fr; }
+    .guides { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  }
+
+  /* ≤760: 2 columns (minimum), slightly smaller cards */
+  @media (max-width: 760px) {
+    .guides { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .guide { padding: 24px 22px 20px; }
+    .guide-title { font-size: 20px; }
+    .guide-desc { font-size: 14px; margin-bottom: 16px; }
   }
 
   @media (max-width: 640px) {
@@ -641,11 +633,26 @@
     .hero { padding: 140px 0 60px; }
     .hero h1 { white-space: normal; }
     .hero-meta { grid-template-columns: 1fr; gap: 16px; }
-    .guide { grid-template-columns: 64px 1fr; gap: 16px; padding: 32px 0; }
-    .guide-num { font-size: 36px; }
-    .guide-title { font-size: 24px; }
     .footer-end { flex-direction: column; gap: 16px; align-items: flex-start; }
     .search-hint { display: none; }
+    /* keep 2 columns; tighten cards + stack the footer line so it never overflows */
+    .guides { gap: 14px; }
+    .guide { padding: 20px 18px 18px; border-top-width: 3px; }
+    .guide-eyebrow { font-size: 9px; letter-spacing: 0.16em; margin-bottom: 10px; }
+    .guide-title { font-size: 18px; line-height: 1.15; }
+    .guide-desc { font-size: 13px; margin-bottom: 14px; }
+    .guide-tags { gap: 5px; margin-bottom: 16px; }
+    .guide-tag { font-size: 9px; padding: 3px 7px; letter-spacing: 0.06em; }
+    .guide-foot { flex-direction: column; align-items: flex-start; gap: 8px; padding-top: 12px; }
+  }
+
+  /* ≤430: very small phones — smallest comfortable sizing, still 2 columns */
+  @media (max-width: 430px) {
+    .container { padding: 0 16px; }
+    .guides { gap: 12px; }
+    .guide { padding: 16px 14px 14px; }
+    .guide-title { font-size: 16px; letter-spacing: -0.01em; }
+    .guide-desc { font-size: 12.5px; line-height: 1.5; }
   }
 </style>
 </head>
@@ -744,109 +751,83 @@
 
     <a href="/using-claude"
        class="guide"
+       data-num="01"
        data-title="How to Use Claude at PGC"
        data-desc="End-user guide for staff. Getting set up, what Claude is good at, how to structure prompts, and how Paradigm uses Claude day-to-day."
        data-tags="all-staff ai">
-      <div class="guide-num">0<span class="slash">/</span>1</div>
-      <div class="guide-body">
-        <span class="guide-eyebrow">For everyone at PGC</span>
-        <h2 class="guide-title">How to Use Claude at PGC</h2>
-        <p class="guide-desc">
-          End-user guide for staff. Getting set up, what Claude is good at, how to
-          structure prompts, and how Paradigm uses Claude day-to-day.
-        </p>
-        <div class="guide-tags">
-          <span class="guide-tag audience">For all staff</span>
-          <span class="guide-tag topic">AI / Claude</span>
-        </div>
+      <span class="guide-eyebrow">For everyone at PGC</span>
+      <h2 class="guide-title">How to Use Claude at PGC</h2>
+      <p class="guide-desc">End-user guide for staff. Getting set up, what Claude is good at, how to structure prompts, and how Paradigm uses Claude day-to-day.</p>
+      <div class="guide-tags">
+        <span class="guide-tag audience">For all staff</span>
+        <span class="guide-tag topic">AI / Claude</span>
       </div>
-      <div class="guide-side">
-        <div class="guide-meta">Updated <span class="red">May 2026</span></div>
-        <div class="guide-meta">~ 12 min read</div>
-        <div class="guide-arrow"><span>Read guide</span><span class="arrow">→</span></div>
+      <div class="guide-foot">
+        <span class="guide-meta">Updated <span class="red">May 2026</span> · ~12 min</span>
+        <span class="guide-arrow">Read<span class="arrow">→</span></span>
       </div>
     </a>
 
     <a href="/claude-m365-setup"
        class="guide"
+       data-num="02"
        data-title="Connecting Claude to Microsoft 365"
        data-desc="Technical briefing covering how Claude integrates with our M365 tenant, which connectors are wired up, and what data Claude can and cannot see."
        data-tags="it ai microsoft-365 setup">
-      <div class="guide-num">0<span class="slash">/</span>2</div>
-      <div class="guide-body">
-        <span class="guide-eyebrow">For IT &amp; Admins</span>
-        <h2 class="guide-title">Connecting Claude to Microsoft 365</h2>
-        <p class="guide-desc">
-          Technical briefing covering how Claude integrates with our M365 tenant,
-          which connectors are wired up, and what data Claude can and cannot see.
-        </p>
-        <div class="guide-tags">
-          <span class="guide-tag audience">For IT / admins</span>
-          <span class="guide-tag topic">AI / Claude</span>
-          <span class="guide-tag topic">Microsoft 365</span>
-          <span class="guide-tag topic">Setup</span>
-        </div>
+      <span class="guide-eyebrow">For IT &amp; Admins</span>
+      <h2 class="guide-title">Connecting Claude to Microsoft 365</h2>
+      <p class="guide-desc">Technical briefing covering how Claude integrates with our M365 tenant, which connectors are wired up, and what data Claude can and cannot see.</p>
+      <div class="guide-tags">
+        <span class="guide-tag audience">For IT / admins</span>
+        <span class="guide-tag topic">AI / Claude</span>
+        <span class="guide-tag topic">Microsoft 365</span>
+        <span class="guide-tag topic">Setup</span>
       </div>
-      <div class="guide-side">
-        <div class="guide-meta">Updated <span class="red">May 2026</span></div>
-        <div class="guide-meta">~ 18 min read</div>
-        <div class="guide-arrow"><span>Read guide</span><span class="arrow">→</span></div>
+      <div class="guide-foot">
+        <span class="guide-meta">Updated <span class="red">May 2026</span> · ~18 min</span>
+        <span class="guide-arrow">Read<span class="arrow">→</span></span>
       </div>
     </a>
 
     <a href="/kamloops-office-printer"
        class="guide"
+       data-num="03"
        data-title="Adding the Kamloops Office Printer"
-       data-desc="First-time setup for the shared Kamloops office printer (Epson WF-3820). Plain-English, two-minute walkthrough for Windows and Mac — no jargon, no numbers to type."
+       data-desc="First-time setup for the shared Kamloops office printer (Epson WF-3820). Step-by-step for Windows and Mac, written for all staff."
        data-tags="all-staff setup troubleshooting">
-      <div class="guide-num">0<span class="slash">/</span>3</div>
-      <div class="guide-body">
-        <span class="guide-eyebrow">For everyone at the Kamloops office</span>
-        <h2 class="guide-title">Adding the Kamloops Office Printer</h2>
-        <p class="guide-desc">
-          First-time setup for the shared Kamloops office printer. A plain-English,
-          two-minute walkthrough for Windows and Mac — no jargon, nothing to install,
-          no numbers to type.
-        </p>
-        <div class="guide-tags">
-          <span class="guide-tag audience">For all staff</span>
-          <span class="guide-tag topic">Setup</span>
-          <span class="guide-tag topic">Troubleshooting</span>
-        </div>
+      <span class="guide-eyebrow">For everyone at the Kamloops office</span>
+      <h2 class="guide-title">Adding the Kamloops Office Printer</h2>
+      <p class="guide-desc">First-time setup for the shared Kamloops office printer. Step-by-step for Windows and Mac, written so anyone can follow it.</p>
+      <div class="guide-tags">
+        <span class="guide-tag audience">For all staff</span>
+        <span class="guide-tag topic">Setup</span>
+        <span class="guide-tag topic">Troubleshooting</span>
       </div>
-      <div class="guide-side">
-        <div class="guide-meta">Updated <span class="red">June 2026</span></div>
-        <div class="guide-meta">~ 2 min read</div>
-        <div class="guide-arrow"><span>Read guide</span><span class="arrow">→</span></div>
+      <div class="guide-foot">
+        <span class="guide-meta">Updated <span class="red">June 2026</span> · ~2 min</span>
+        <span class="guide-arrow">Read<span class="arrow">→</span></span>
       </div>
     </a>
 
     <!-- HIDDEN: Risk Analysis guide (kept in codebase, hidden from listing)
     <a href="/claude-m365-risk-analysis"
        class="guide"
+       data-num="04"
        data-title="Connecting Claude to Microsoft 365: Risk Analysis"
        data-desc="Risk analysis for leadership. Where our data goes, whether it is used for training, what controls protect finance, HR, and manufacturing secrets, and the recommendation to proceed with a pilot. Every fact verified against official sources."
        data-tags="management it ai microsoft-365 risk">
-      <div class="guide-num">0<span class="slash">/</span>3</div>
-      <div class="guide-body">
-        <span class="guide-eyebrow">For Leadership &amp; IT</span>
-        <h2 class="guide-title">Connecting Claude to Microsoft 365: Risk Analysis</h2>
-        <p class="guide-desc">
-          A leadership-facing risk analysis. Where our data goes, whether it is used
-          for training, what controls protect finance, HR, and manufacturing secrets,
-          and a clear recommendation. Every fact verified against official sources.
-        </p>
-        <div class="guide-tags">
-          <span class="guide-tag audience">For leadership</span>
-          <span class="guide-tag topic">AI / Claude</span>
-          <span class="guide-tag topic">Microsoft 365</span>
-          <span class="guide-tag topic">Risk</span>
-        </div>
+      <span class="guide-eyebrow">For Leadership &amp; IT</span>
+      <h2 class="guide-title">Connecting Claude to Microsoft 365: Risk Analysis</h2>
+      <p class="guide-desc">A leadership-facing risk analysis. Where our data goes, whether it is used for training, what controls protect finance, HR, and manufacturing secrets, and a clear recommendation. Every fact verified against official sources.</p>
+      <div class="guide-tags">
+        <span class="guide-tag audience">For leadership</span>
+        <span class="guide-tag topic">AI / Claude</span>
+        <span class="guide-tag topic">Microsoft 365</span>
+        <span class="guide-tag topic">Risk</span>
       </div>
-      <div class="guide-side">
-        <div class="guide-meta">Updated <span class="red">May 2026</span></div>
-        <div class="guide-meta">~ 22 min read</div>
-        <div class="guide-arrow"><span>Read guide</span><span class="arrow">→</span></div>
+      <div class="guide-foot">
+        <span class="guide-meta">Updated <span class="red">May 2026</span> · ~22 min</span>
+        <span class="guide-arrow">Read<span class="arrow">→</span></span>
       </div>
     </a>
     -->
