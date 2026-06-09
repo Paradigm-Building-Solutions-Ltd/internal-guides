@@ -209,13 +209,76 @@ backgrounds. Match their visual sophistication.
 ```
 1. <head>  with all required meta tags
 2. Top bar with brand mark + page title (fixed position)
-3. Hero section: eyebrow + title + lede + meta blocks
-4. TL;DR block (dark ink background, red accent) — optional but encouraged
-5. Numbered chapters / sections with chapter headers
-6. Body content with body-grid layout (margin + main + margin)
-7. Pull quotes, define blocks, method cards as needed
-8. Footer with brand mark + tagline + maintainer info
-9. <script> for scroll animations / progress bar
+3. Side navigation dots (.nav-dots) — MANDATORY, see below
+4. Hero section: eyebrow + title + lede + meta blocks
+5. TL;DR block (dark ink background, red accent) — optional but encouraged
+6. Numbered chapters / sections with chapter headers
+7. Body content with body-grid layout (margin + main + margin)
+8. Pull quotes, define blocks, method cards as needed
+9. Footer with brand mark + tagline + Maintainer block — MANDATORY, see below
+10. <script> for scroll animations + progress bar + active nav dot
+```
+
+### Hero title treatment (use on every guide)
+
+The hero `<h1>` uses stacked `.line` spans with one `.accent` span (italic
+red) on the key phrase. This is the signature look. Match it on every guide.
+
+```html
+<h1>
+  <span class="line">Connect Claude to</span>
+  <span class="line">your <span class="accent">Microsoft</span></span>
+  <span class="line">world.</span>
+</h1>
+```
+
+### Side navigation dots (MANDATORY on every guide)
+
+Every guide MUST have the right-side `.nav-dots` scroll navigation: one dot per
+top-level `<section>`, the active dot tracking scroll position, and the label
+revealing on hover. It hides automatically below 1100px. Reference
+implementation: `claude-m365-setup.html` and `kamloops-office-printer.html`.
+
+Three parts must all be present and kept in sync:
+
+1. **Markup** — place right after the `.progress` bar, before `.container`.
+   One `<a>` per section, `href` matching each `<section id="...">`, first link
+   gets `class="active"`:
+
+```html
+<nav class="nav-dots" id="navDots">
+  <a href="#opening" class="active"><span class="lbl">Start</span><span class="dot"></span></a>
+  <a href="#section-id"><span class="lbl">Short label</span><span class="dot"></span></a>
+  <!-- one per section -->
+</nav>
+```
+
+2. **CSS** — copy the `.nav-dots` block from either reference guide, and add
+   `.nav-dots { display: none; }` inside the `max-width: 1100px` media query.
+
+3. **Script** — the "Active nav dot" block at the end of `<script>` that toggles
+   `.active` based on scroll position. Copy it from either reference guide.
+
+Every `href` in the nav MUST match a real `<section id="...">`, or the dot will
+not highlight.
+
+### Maintainer block (MANDATORY in every guide footer)
+
+Every guide footer MUST include a Maintainer column with this exact content
+(inside the three-column `.footer-grid`):
+
+```html
+<div>
+  <div class="label">Maintainer</div>
+  <p><strong>Deeparsh Singh Dang</strong><br>IT &amp; AI Coordinator<br><a href="mailto:deeparsh.dang@pgc.ca">deeparsh.dang@pgc.ca</a></p>
+</div>
+```
+
+The footer CSS must include the link styling so the email renders correctly:
+
+```css
+.footer-grid a { color: var(--ink-soft); text-decoration: none; border-bottom: 1px solid rgba(22,21,19,0.2); transition: all 0.15s; }
+.footer-grid a:hover { color: var(--red); border-bottom-color: var(--red); }
 ```
 
 ---
@@ -347,6 +410,9 @@ Run through this checklist mentally:
 - [ ] Filename is lowercase, hyphenated, ends in `.html`
 - [ ] `<title>` ends with `: Paradigm Internal Guide`
 - [ ] No em dashes (`—`) or en dashes (`–`) anywhere in the guide text (see Writing style)
+- [ ] Hero `<h1>` uses the stacked `.line` + `.accent` title treatment
+- [ ] Side `.nav-dots` present, with markup + CSS + active-dot script, and every `href` matches a real section id
+- [ ] Footer includes the Maintainer block (exact content above) and the `.footer-grid a` link styling
 - [ ] Content contains no secrets, no internal IPs, no leaked credentials
 - [ ] A matching `<a class="guide">` card exists in `index.html`
 - [ ] `data-tags` on the card lists every applicable canonical tag

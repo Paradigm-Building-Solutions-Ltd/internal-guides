@@ -450,12 +450,51 @@
   }
   .footer-end .red { color: var(--red); }
 
+  /* ============ NAV DOTS ============ */
+  .nav-dots {
+    position: fixed;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .nav-dots a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 0;
+    text-decoration: none;
+    color: var(--ink-faint);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: color 0.3s;
+    justify-content: flex-end;
+  }
+  .nav-dots a .dot {
+    width: 8px;
+    height: 8px;
+    border: 1.5px solid var(--ink-faint);
+    border-radius: 50%;
+    transition: all 0.3s;
+  }
+  .nav-dots a .lbl { opacity: 0; transition: opacity 0.3s; }
+  .nav-dots a:hover .lbl, .nav-dots a.active .lbl { opacity: 1; }
+  .nav-dots a:hover { color: var(--red); }
+  .nav-dots a:hover .dot, .nav-dots a.active .dot { background: var(--red); border-color: var(--red); }
+  .nav-dots a.active { color: var(--red); }
+
   /* ============ ANIMATIONS ============ */
   .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
   /* ============ RESPONSIVE ============ */
   @media (max-width: 1100px) {
+    .nav-dots { display: none; }
     .container { padding: 0 40px; }
     .body-grid { grid-template-columns: 1fr; gap: 24px; }
     .body-grid > .body-main { grid-column: 1; }
@@ -492,6 +531,14 @@
   </div>
 </div>
 <div class="progress" id="progress"></div>
+
+<!-- NAV DOTS -->
+<nav class="nav-dots" id="navDots">
+  <a href="#opening" class="active"><span class="lbl">Start</span><span class="dot"></span></a>
+  <a href="#before"><span class="lbl">Before you start</span><span class="dot"></span></a>
+  <a href="#add"><span class="lbl">Add the printer</span><span class="dot"></span></a>
+  <a href="#trouble"><span class="lbl">Quick fixes</span><span class="dot"></span></a>
+</nav>
 
 <div class="container">
 
@@ -725,6 +772,20 @@
     });
   }, { threshold: 0.08, rootMargin: '0px 0px -80px 0px' });
   revealEls.forEach(el => obs.observe(el));
+
+  // Active nav dot
+  const navLinks = document.querySelectorAll('.nav-dots a');
+  const sections = Array.from(navLinks).map(a => document.querySelector(a.getAttribute('href')));
+  function updateActive() {
+    const offset = window.scrollY + 200;
+    let curr = sections[0];
+    for (const s of sections) {
+      if (s && s.offsetTop <= offset) curr = s;
+    }
+    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + curr.id));
+  }
+  window.addEventListener('scroll', updateActive);
+  updateActive();
 </script>
 
 </body>
